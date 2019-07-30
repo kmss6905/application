@@ -22,4 +22,13 @@ public class LivestreamInfo {
         return live_stream_tag;
     }
 
+    @Override
+    public String toString() {
+        return "LivestreamInfo{" +
+                "nick_name='" + nick_name + '\'' +
+                ", live_stream_url='" + live_stream_url + '\'' +
+                ", live_stream_title='" + live_stream_title + '\'' +
+                ", live_stream_tag='" + live_stream_tag + '\'' +
+                '}';
+    }
 }

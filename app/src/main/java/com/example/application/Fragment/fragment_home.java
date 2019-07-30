@@ -19,6 +19,7 @@ import com.example.application.Adapter.AdapterVODitemMini;
 import com.example.application.IPclass;
 import com.example.application.ItemData.ItemLiveData;
 import com.example.application.ItemData.ItemVodMiniData;
+import com.example.application.Logg;
 import com.example.application.R;
 import com.example.application.Retrofit2.Repo.LivestreamInfo;
 import com.example.application.Retrofit2.RequestApi;
@@ -64,6 +65,9 @@ public class fragment_home extends Fragment {
         ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.layout_fragment_home, container, false);
 
 
+        // 데이터 리스트
+        itemLiveDataArrayList = new ArrayList<>();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://" + IPclass.IP_ADDRESS + "/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -73,13 +77,14 @@ public class fragment_home extends Fragment {
 
 
 
+        get_live_list();
+
+
 
         recyclerView_hot_live_list = rootView.findViewById(R.id.recyclerView_hot_live_list);
         recyclerView_hot_live_list.setHasFixedSize(true);//??
 
 
-        // 데이터 리스트
-        itemLiveDataArrayList = new ArrayList<>();
 
 
         // 어뎁터 만들기
@@ -104,24 +109,36 @@ public class fragment_home extends Fragment {
 
     public void get_live_list(){
         Call<List<LivestreamInfo>> call = requestApi.LIVE_STREAM_CALL();
-
+        Logg.i("==================================frgHome========================");
         call.enqueue(new Callback<List<LivestreamInfo>>() {
             @Override
             public void onResponse(Call<List<LivestreamInfo>> call, Response<List<LivestreamInfo>> response) {
                 if(!response.isSuccessful()){
+                    Logg.i("==================================frgHome========================");
                     Log.e(TAG, "onResponse: " + response.message() );
+                    Logg.i("==================================frgHome========================");
                     return;
                 }
 
+                Logg.i("==================================frgHome========================");
                 List<LivestreamInfo> livestreamInfos = response.body();
+                Logg.i("==================================frgHome========================");
+                System.out.println("response.code : " + response.code());
+                Logg.i("==================================frgHome========================");
 
                 for(LivestreamInfo livestreamInfo : livestreamInfos){
-                    livestreamInfo.getLive_stream_title();
-                    livestreamInfo.getNick_name();
-                    livestreamInfo.getLive_stream_tag();
-                    livestreamInfo.getLive_stream_url();
+
+                    ItemLiveData itemLiveData = new ItemLiveData();
+                    itemLiveData.setLive_stream_title(livestreamInfo.getLive_stream_title());
+                    itemLiveData.setLive_stream_streamer_nick(livestreamInfo.getNick_name());
+                    itemLiveData.setLive_stream_tag(livestreamInfo.getLive_stream_tag());
+
+
+                    itemLiveDataArrayList.add(itemLiveData);
+
                 }
 
+                adapterLIVEitem.notifyDataSetChanged();
 
 
             }
@@ -129,6 +146,7 @@ public class fragment_home extends Fragment {
             @Override
             public void onFailure(Call<List<LivestreamInfo>> call, Throwable t) {
                 Log.e(TAG, "onFailure: " + t.getMessage());
+                Logg.i("==================================frgHome========================");
             }
         });
     }

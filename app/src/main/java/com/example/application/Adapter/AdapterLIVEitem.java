@@ -66,12 +66,12 @@ public class AdapterLIVEitem extends RecyclerView.Adapter<AdapterLIVEitem.LiveIt
         holder.textView_title_liveStream.setText(itemLiveDataArrayList.get(position).getLive_stream_title());
         holder.textView_bj_nick_liveStream.setText(itemLiveDataArrayList.get(position).getLive_stream_streamer_nick());
         holder.textView_viewer_liveStream.setText(itemLiveDataArrayList.get(position).getLive_stream_viewer());
-        holder.textView_viewer_liveStream.setText(itemLiveDataArrayList.get(position).getLive_stream_tag());
+        holder.textView_tag_liveStream.setText(itemLiveDataArrayList.get(position).getLive_stream_tag());
 
 
 
-        // 썸네일 넣음
-        Glide.with(mcontext).load("http://" + itemLiveDataArrayList.get(position).getLive_stream_thumbnail()).into(holder.imageView_thumbnail_liveStream);
+//        // 썸네일 넣음
+//        Glide.with(mcontext).load("http://" + itemLiveDataArrayList.get(position).getLive_stream_thumbnail()).into(holder.imageView_thumbnail_liveStream);
 
 
 

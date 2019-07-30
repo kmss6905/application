@@ -7,7 +7,7 @@
 
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="96dp"
         app:cardCornerRadius="5dp"
         app:cardElevation="2dp">
@@ -28,12 +28,35 @@
                         android:layout_height="match_parent" />
 
 
-                    <!-- 스트림 섬네일 이미지 -->
-                    <ImageView
-                        android:id="@+id/imageView_thumbnail_liveStream"
-                        android:layout_width="96dp"
-                        android:layout_height="96dp"
-                        android:src="@drawable/com_facebook_profile_picture_blank_portrait" />
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <!-- 스트림 섬네일 이미지 -->
+                        <ImageView
+                            android:id="@+id/imageView_thumbnail_liveStream"
+                            android:layout_width="96dp"
+                            android:layout_height="96dp"
+                            android:src="@drawable/com_facebook_profile_picture_blank_portrait" />
+
+                        <!--<ImageView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:src="@drawable/live"/>-->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/mini_textview_border"
+                            android:fontFamily="@font/noto_sans_kr_bold"
+                            android:text="LIVE"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/white"
+                            android:includeFontPadding="false"
+                            android:textSize="14dp" />
+
+                    </FrameLayout>
+
+
 
                     <TextView
                         android:layout_width="10dp"
@@ -63,15 +86,13 @@
                                 android:id="@+id/textView_title_liveStream"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="안녕하세요"
+                                android:text="fadsfds"
                                 android:fontFamily="@font/noto_sans_kr_bold"
                                 android:textColor="@android:color/black"
-                                android:layout_gravity="center"/>
+                                android:layout_gravity="center"
+                                android:layout_weight="5"/>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1" />
+
 
 
                             <!-- 스트림 정보 더보기 버튼 -->
@@ -79,9 +100,11 @@
                                 android:id="@+id/btn_menu_liveStream"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@android:color/transparent"
-                                android:src="@mipmap/outline_more_vert_black_24"
-                                android:visibility="gone"/>
+                                android:backgroundTint="@android:color/transparent"
+                                android:src="@mipmap/outline_more_vert_black_18"
+                                android:layout_weight="1"/>
+
+
 
                         </LinearLayout>
 
