@@ -181,18 +181,23 @@ public class ManagePasswordActivity extends AppCompatActivity {
                 switch (passwordCheckResponse.getResult()){
                     case "notUserPw":
                         Toast.makeText(getApplicationContext(), "현재 비밀번호와 일치하지 않습니다", Toast.LENGTH_SHORT).show();
+                        Log.i(TAG, "onResponse: response.body()" + response.body());
+
 
                         break;
                     case "notSamePw":
                         Toast.makeText(getApplicationContext(), "새로운 비밀번호와 비밀번호 재확인이 일치하지 않습니다", Toast.LENGTH_SHORT).show();
+                        Log.i(TAG, "onResponse: response.body()" + response.body());
 
                         break;
                     case "notFormPw":
                         Toast.makeText(getApplicationContext(), "올바른 비밀번호 형식이 아닙니다", Toast.LENGTH_SHORT);
+                        Log.i(TAG, "onResponse: response.body()" + response.body());
 
                         break;
                     case "success":
                         Toast.makeText(getApplicationContext(), "성공적으로 비밀번호를 변경하였습니다", Toast.LENGTH_SHORT).show();
+                        Log.i(TAG, "onResponse: response.body()" + response.body());
                         onBackPressed(); // 뒤로 갑니다.
                         break;
 
