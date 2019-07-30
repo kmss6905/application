@@ -3,6 +3,7 @@ package com.example.application.Retrofit2;
 import com.example.application.Account.ManagePasswordActivity;
 import com.example.application.Retrofit2.Repo.Account;
 import com.example.application.Retrofit2.Repo.CheckNickResult;
+import com.example.application.Retrofit2.Repo.LivestreamInfo;
 import com.example.application.Retrofit2.Repo.Password;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import retrofit2.http.Url;
@@ -59,8 +61,11 @@ public interface RequestApi {
     );
 
 
-
-
-
+    /**
+     * 현재 라이브 방송중인 리스트 요청
+     * @return
+     */
+    @GET("get_live_info.php")
+    Call<List<LivestreamInfo>> LIVE_STREAM_CALL();
 
 }

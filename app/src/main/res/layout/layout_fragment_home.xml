@@ -6,6 +6,249 @@
 
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="?attr/actionBarSize" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="10dp"
+                android:layout_height="match_parent" />
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <!-- 오늘의 VOD / 더보기 버튼 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/noto_sans_kr_bold"
+                        android:text="오늘의 VOD"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+
+                    <!-- 오늘의 VOD 더보기 버튼 -->
+                    <ImageButton
+                        android:id="@+id/btn_more_today_vod"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/baseline_navigate_next_black_36"
+                        android:background="@android:color/transparent"
+                        android:layout_gravity="center"
+                        />
+
+                </LinearLayout>
+
+                <!-- 오늘의 vod 리스트 recyclerView-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView_today_vod_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="96dp">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <!-- hot Vod/ hot vod 버튼 -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/noto_sans_kr_bold"
+                        android:text="인기 VOD"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <!-- 인기 vod 더보기 버튼 -->
+                    <ImageButton
+                        android:id="@+id/btn_more_hot_vod"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:src="@mipmap/baseline_navigate_next_black_36"
+                        android:layout_gravity="center"/>
+
+                </LinearLayout>
+
+                <!-- hot vod recyclerView 리스트 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView_hot_vod_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="96dp">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <!-- 인기 live / 더보기 버튼 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/noto_sans_kr_bold"
+                        android:text="인기 "
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:textColor="@android:color/holo_red_dark"
+                        android:fontFamily="@font/noto_sans_kr_bold"
+                        android:text=" LIVE"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+
+                    <!-- 인기 live 더보기 버튼 -->
+                    <ImageButton
+                        android:id="@+id/btn_more_hot_live"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/baseline_navigate_next_black_36"
+                        android:background="@android:color/transparent"
+                        android:layout_gravity="center"
+                        />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView_hot_live_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/noto_sans_kr_bold"
+                        android:text="여행 태그"
+                        android:layout_gravity="center"/>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+
+                    <!-- 인기 live 더보기 버튼 -->
+                    <ImageButton
+                        android:id="@+id/btn_more_live_tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/baseline_navigate_next_black_36"
+                        android:background="@android:color/transparent"
+                        android:layout_gravity="center"
+                        />
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+
+
+
+            <TextView
+                android:layout_width="10dp"
+                android:layout_height="match_parent" />
+
+
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
