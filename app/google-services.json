@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "79680736849",
+    "firebase_url": "https://teamnova-74d6d.firebaseio.com",
+    "project_id": "teamnova-74d6d",
+    "storage_bucket": "teamnova-74d6d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:79680736849:android:36619d518cf18c3a",
+        "android_client_info": {
+          "package_name": "com.example.application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "79680736849-2ba0f0ugj7hfm1kd8i07q4i2hj4tt74n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.application",
+            "certificate_hash": "09122283f3d66c5e7303d9634d9ff665e89a1e1b"
+          }
+        },
+        {
+          "client_id": "79680736849-1vooe94o5d90k84o61vkfclhm3v2fcuk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtrJNIZ_HxH0sh0eqiXH2j2Ik_YVgFJRU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "79680736849-1vooe94o5d90k84o61vkfclhm3v2fcuk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

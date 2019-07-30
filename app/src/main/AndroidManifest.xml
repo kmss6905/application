@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.application">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
+    <application
+        android:name=".GlobalApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".Account.ManagePasswordActivity"></activity>
+        <activity
+            android:name=".Broadcast.ViewerLiveBroadcastActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity android:name=".Broadcast.LiveBroadcastActivity" />
+        <activity android:name=".Broadcast.ManageMyBroadcastActivity" />
+        <activity android:name=".Account.ManageAccountActivity" />
+        <activity android:name=".Login_Sign.HomeActivitiy"></activity>
+        <activity
+            android:name=".Login_Sign.Test2Acitivity"
+            android:label="@string/title_activity_test2_acitivity" />
+        <activity android:name=".Login_Sign.InitActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Login_Sign.SettingNameActivity" /> <!-- 페이스북 메타데이터 -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_key" />
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="d5111d54f3f6fa35f856f980a9412bbb" />
+
+        <activity android:name=".Login_Sign.MainActivity2" />
+        <activity android:name=".Login_Sign.FindPwdActivity" />
+        <activity android:name=".TestActivity" />
+        <activity android:name=".Login_Sign.LoginActivity" />
+        <activity android:name=".Login_Sign.IndexActivity" />
+        <activity android:name=".Login_Sign.RegisterActivity" />
+        <activity android:name=".MainActivity" />
+    </application>
+
+</manifest>

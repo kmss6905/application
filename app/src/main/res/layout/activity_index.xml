@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Login_Sign.IndexActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="140dp" />
+
+    <!-- 나중에 폰트를 다르게 하자 -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="40dp"
+        android:textFontWeight="10"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:text="@string/app_title"/>
+
+    
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="230dp" />
+    
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <!-- 계정으로 로그인 하기-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/email_login_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/button"
+                android:drawableLeft="@mipmap/baseline_mail_outline_black_48"
+                android:text="계정으로 로그인하기"
+                android:paddingRight="50px"/>
+
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="5dp" />
+
+
+        <!-- 카카오톡 로그인 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="match_parent" />
+
+
+            <com.kakao.usermgmt.LoginButton
+
+                android:id="@+id/kako_login_btn"
+
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+
+            <Button
+                android:id="@+id/btn_custom_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/button"
+                android:backgroundTint="@color/com_kakao_button_background_press"
+                android:textColor="@color/black"
+                android:drawableLeft="@drawable/kakaotalk_icon"
+                android:paddingRight="50px"
+                android:text="카카오 로그인" />
+
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="match_parent" />
+
+
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/btn_facebook_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+
+
+            <Button
+                android:id="@+id/btn_custom_facebook_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/button"
+                android:backgroundTint="@color/com_facebook_button_background_color"
+                android:drawableLeft="@drawable/facebook_login_icon"
+                android:paddingLeft="@dimen/com_facebook_button_login_corner_radius"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:paddingRight="50px"
+                android:text="페이스북 로그인" />
+
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/find_pwd_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00ff0000"
+                android:text="비밀번호 찾기"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+
+            <Button
+                android:id="@+id/register_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00ff0000"
+                android:text="회원가입" />
+
+
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+    
+    
+    
+
+
+
+</LinearLayout>

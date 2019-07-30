@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">application</string>
+    <string name="kakao_app_key">d5111d54f3f6fa35f856f980a9412bbb</string>
+    <string name="title_activity_register">RegisterActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="app_title">TRAVEL LIVE</string>
+    <string name="facebook_app_key">2365803400342008</string>
+
+
+    <!-- 닉네임 입력 상세설명 -->
+    <string name="info_nickname">계속해서 진행하기 위해선 닉네임이 필요합니다. \n닉네임을 입력해주세요</string>
+    <string name="title_activity_test2_acitivity">Test2Acitivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+
+    <string name="ok">네</string>
+    <string name="cencel">아니요</string>
+
+
+</resources>

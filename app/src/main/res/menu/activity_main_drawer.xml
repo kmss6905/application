@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <!-- android checkableBehavior 그룹 내부의 아이템들에게 체크 기능을 부여하며, single의 경우 라디오 버튼 처럼 그룹 내에 한번에
+    한번에 하나의 아이템만 체크된다.-->
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_live"
+            android:icon="@mipmap/baseline_videocam_black_36"
+            android:title="LIVE 방송하기"/>
+
+        <item
+            android:id="@+id/nav_vod"
+            android:icon="@mipmap/baseline_live_tv_black_36"
+            android:title="VOD 방송올리기"/>
+
+        <item
+            android:id="@+id/nav_my_broadcast_room"
+            android:icon="@mipmap/baseline_store_black_36"
+            android:title="내 방송국 가기"
+            />
+
+        <item
+            android:id="@+id/nav_my_coin_status"
+            android:icon="@drawable/donate"
+            android:title="코인내역 보기"
+            />
+
+    </group>
+</menu>

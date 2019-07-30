@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Login_Sign.MainActivity2"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+
+    <Button
+        android:id="@+id/kako_button_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button"
+        android:backgroundTint="@color/com_kakao_button_background_press"
+        android:textColor="@color/black"
+        android:drawableLeft="@drawable/kakaotalk_icon"
+        android:paddingRight="50px"
+        android:text="카카오 로그아웃" />
+
+
+    <Button
+        android:id="@+id/btn_email_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button"
+        android:drawableLeft="@mipmap/baseline_mail_outline_black_48"
+        android:paddingRight="50px"
+        android:text="이메일로 계정 로그아웃" />
+
+    <Button
+        android:id="@+id/btn_custom_facebook_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button"
+        android:backgroundTint="@color/com_facebook_button_background_color"
+        android:drawableLeft="@drawable/facebook_login_icon"
+        android:paddingLeft="@dimen/com_facebook_button_login_corner_radius"
+        android:paddingRight="50px"
+        android:text="페이스북 로그아웃"
+        android:textAlignment="center"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/user_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/user_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="님 어서오세요!"/>
+
+    <TextView
+        android:id="@+id/user_sns"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="gone" />
+
+
+
+
+</LinearLayout>

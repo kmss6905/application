@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Account.ManageAccountActivity"
+    android:orientation="vertical">
+
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="center"
+        android:titleTextColor="@color/black">
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="10dp"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <!-- 프로필 이미지 -->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/account_profile_img"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_gravity="center"
+                android:src="@drawable/img"
+                app:civ_border_color="#FF000000"
+                app:civ_border_width="2dp"/>
+
+
+            <!-- 프로필 이미지 변경 버튼 -->
+            <Button
+                android:id="@+id/btn_edit_profile_img"
+                android:layout_width="wrap_content"
+                android:layout_height="29dp"
+                android:layout_gravity="center"
+                android:background="@drawable/button_select"
+                android:text="프로필수정" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="닉네임 : "/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+                <TextView
+                    android:id="@+id/account_nick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="kmss6905" />
+
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/btn_edit_nick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="닉네임변경"
+                    android:background="@drawable/button_select"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_change_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="비밀번호 변경"
+                    android:background="@drawable/button"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:id="@+id/btn_show_mycoin_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="내 코인현황"
+                    android:background="@drawable/button"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+
+            <!-- 로그아웃 버튼이지만, 페이스북 카카오톡 에 따라 다른 버튼 이미지가 나오도록 한다.-->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+
+            <Button
+                android:id="@+id/btn_logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="로그아웃"
+                android:textColor="@android:color/white"
+                android:background="@drawable/button_blue"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="10dp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+    
+    
+    
+    
+
+</LinearLayout>

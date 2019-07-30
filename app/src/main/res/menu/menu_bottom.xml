@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="home" />
+
+    <item
+        android:id="@+id/navigation_map"
+        android:icon="@mipmap/outline_map_black_24"
+        android:title="map" />
+
+    <item
+        android:id="@+id/navigation_trip"
+        android:icon="@mipmap/outline_flight_black_24"
+        android:title="trip_info" />
+
+
+    <item android:id="@+id/navigation_account"
+        android:icon="@mipmap/outline_person_black_24"
+        android:title="account_info">
+    </item>
+
+</menu>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/dialog_border">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:text="현재 방송중입니다."
+        android:textColor="@android:color/black"
+        android:fontFamily="@font/noto_sans_kr_regular"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:text="진행중인 방송을 종료하시겠습니까?"
+        android:textColor="@android:color/holo_red_dark"
+        android:fontFamily="@font/noto_sans_kr_regular"/>
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_dialog_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/noto_sans_kr_regular"
+            android:textColor="@android:color/black"
+            android:background="@drawable/button"
+            android:text="아니요"
+            />
+
+        <Button
+            android:id="@+id/btn_dialog_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button"
+            android:fontFamily="@font/noto_sans_kr_regular"
+            android:textColor="@android:color/black"
+            android:text="네"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
