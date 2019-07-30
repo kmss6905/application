@@ -12,10 +12,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.application.IPclass;
 import com.example.application.R;
 import com.example.application.Retrofit2.Repo.Password;
 import com.example.application.Retrofit2.RequestApi;
@@ -23,6 +25,8 @@ import com.example.application.Retrofit2.RequestApi;
 import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.security.auth.login.LoginException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,9 +41,8 @@ public class ManagePasswordActivity extends AppCompatActivity {
 
     // 통신에 필요한 레트로핏 요청 api, json을 gson으로 바꿀 컨버터
     RequestApi requestApi;
-    GsonConverterFactory gsonConverterFactory;
-    String awsServerIp  = "http://13.124.74.188/";
-    Map<String, String> postParameter;
+    String awsServerIp  = "http://" + IPclass.IP_ADDRESS + "/";
+    Map<String, String> postParameter = new HashMap<>();
 
 
 
@@ -49,6 +52,8 @@ public class ManagePasswordActivity extends AppCompatActivity {
     EditText editText_new_pw;
     EditText editText_new_againg_pw;
     Button btn_change_password;
+
+
 
 
 
@@ -68,12 +73,12 @@ public class ManagePasswordActivity extends AppCompatActivity {
         requestApi = retrofit.create(RequestApi.class);
 
 
-
-
         // 툴바 참조
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setTitle("비밀번호 변경");
 
 
         // 참조
@@ -83,19 +88,27 @@ public class ManagePasswordActivity extends AppCompatActivity {
         editText_new_againg_pw = findViewById(R.id.editText_new_againg_pw);
 
 
+
+
+
         // 비밀번호 변경 버튼 클릭
         btn_change_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SharedPreferences sharedPreferences = getSharedPreferences("file", MODE_PRIVATE);
 
-
                 if(editText_current_pw.getText().toString().equals("") || editText_new_pw.getText().toString().equals("") || editText_new_againg_pw.getText().toString().equals("")){
                     Toast.makeText(getApplicationContext(), "모두 입력하세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                postParameter.put("currentPw", editText_current_pw.getText().toString());
+                Log.e(TAG, "onClick: currentPw : " + editText_current_pw.getText().toString());
+                Log.e(TAG, "onClick: newPw : " + editText_new_pw.getText().toString() );
+                Log.e(TAG, "onClick: newAgainPw : " + editText_new_againg_pw.getText().toString() );
+                Log.e(TAG, "onClick: id" + sharedPreferences.getString("id", ""));
+
+
+                postParameter.put("currentPw", String.valueOf(editText_current_pw.getText().toString()));
                 postParameter.put("newPw", editText_new_pw.getText().toString());
                 postParameter.put("newAgainPw", editText_new_againg_pw.getText().toString());
                 postParameter.put("id", sharedPreferences.getString("id",""));
@@ -142,7 +155,7 @@ public class ManagePasswordActivity extends AppCompatActivity {
 
 
 
-    //====================================================메소드 들 ====================================
+    //====================================================메소드 모음 ====================================
 
     /**
      * 비밀번호 변경을 위해 파라미터를 post방식으로 보냄
@@ -150,7 +163,7 @@ public class ManagePasswordActivity extends AppCompatActivity {
      */
     // 비밀번호 변경 요청 메소드
      void PostChangePw(Map<String, String> postParametersMap){
-        Map<String, String> parameters = new HashMap<>();
+        Map<String, String> parameters;
         parameters = postParametersMap;
 
         Call<PasswordCheckResponse> passwordCall = requestApi.PASSWORD_CALL(parameters);

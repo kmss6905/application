@@ -108,7 +108,7 @@ public class ManageAccountActivity extends AppCompatActivity{
 
 
 
-        //------------------------------------------------------ 버튼 참조------------------------------------------------------------------------
+        //============================================================버튼 참조============================================================
 
         account_profile_img = findViewById(R.id.account_profile_img); // 프로필 이미지
         btn_edit_profile_img = findViewById(R.id.btn_edit_profile_img); // 프로필 이미지 수정 버튼
@@ -122,7 +122,7 @@ public class ManageAccountActivity extends AppCompatActivity{
         account_nick.setText(intent.getStringExtra("nickname"));
 
 
-        //--------------------------------------------버튼 클릭리스너----------------------------------------------------------------------
+        //============================================================버튼 클릭리스너============================================================
 
 
         // 프로필 이미지 수정 버튼 클릭
@@ -144,13 +144,38 @@ public class ManageAccountActivity extends AppCompatActivity{
             }
         });
 
+        // 비밀번호 변경 버튼 클릭
+        btn_change_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               Intent intent = new Intent(getApplicationContext(), ManagePasswordActivity.class);
+               startActivity(intent);
+            }
+        });
+
+        // 내 코인보기 버튼 클릭
+        btn_show_mycoin_status.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+
+        // 로그아웃 버튼 클릭
+        btn_show_mycoin_status.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
+
 
 
 
     }
 
 
-    //------------------------------------------------툴바 메뉴-----------------------------------------------------------------------------
+    //============================================================툴바 메뉴============================================================
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -177,7 +202,7 @@ public class ManageAccountActivity extends AppCompatActivity{
 
 
 
-    //-----------------------------------------Dialog 메소드--------------------------------------------------------
+    //============================================================Dialog 메소드============================================================
     // 1. 이미지 변경 다이얼로그 : dialog_edit_img()
     // 2. 닉네임 변경 다이얼로그 : dialog_edit_nick()
     // 3. 비번 변경 다이얼로그 : dialog_change_password()

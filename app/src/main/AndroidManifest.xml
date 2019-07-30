@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".Account.ManagePasswordActivity"></activity>
+        <activity android:name=".Account.ManagePasswordActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".Broadcast.ViewerLiveBroadcastActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
