@@ -2,6 +2,7 @@ package com.example.application.Retrofit2;
 
 import com.example.application.Account.ManagePasswordActivity;
 import com.example.application.Retrofit2.Repo.Account;
+import com.example.application.Retrofit2.Repo.AddLiveStream;
 import com.example.application.Retrofit2.Repo.CheckNickResult;
 import com.example.application.Retrofit2.Repo.LivestreamInfo;
 import com.example.application.Retrofit2.Repo.Password;
@@ -67,5 +68,25 @@ public interface RequestApi {
      */
     @GET("get_live_info.php")
     Call<List<LivestreamInfo>> LIVE_STREAM_CALL();
+
+
+
+
+    // 방송 시작
+    @FormUrlEncoded
+    @POST("postlivestream.php")
+    Call<AddLiveStream> ADD_LIVE_STREAM_CALL(@FieldMap Map<String, String> parameters);
+
+
+    // 방송 수정
+    @FormUrlEncoded
+    @POST("postlivestream.php")
+    Call<AddLiveStream> EDIT_LIVE_STREAM_CALL(@FieldMap Map<String, String> parameters);
+
+
+    // 방송 종료
+    @FormUrlEncoded
+    @POST("quitBroadCast.php")
+    Call<AddLiveStream> QUIT_LIVE_STREAM_CALL(@FieldMap Map<String, String> parameters);
 
 }

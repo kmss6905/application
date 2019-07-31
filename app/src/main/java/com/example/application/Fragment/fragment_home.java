@@ -109,6 +109,7 @@ public class fragment_home extends Fragment {
 
     public void get_live_list(){
         Call<List<LivestreamInfo>> call = requestApi.LIVE_STREAM_CALL();
+
         Logg.i("==================================frgHome========================");
         call.enqueue(new Callback<List<LivestreamInfo>>() {
             @Override
@@ -121,17 +122,26 @@ public class fragment_home extends Fragment {
                 }
 
                 Logg.i("==================================frgHome========================");
+
+
                 List<LivestreamInfo> livestreamInfos = response.body();
+
+
                 Logg.i("==================================frgHome========================");
                 System.out.println("response.code : " + response.code());
                 Logg.i("==================================frgHome========================");
 
-                for(LivestreamInfo livestreamInfo : livestreamInfos){
 
+                for(LivestreamInfo livestreamInfo : livestreamInfos){
+                    Logg.i("==================================frgHome========================");
                     ItemLiveData itemLiveData = new ItemLiveData();
+                    Logg.i("==================================frgHome========================");
                     itemLiveData.setLive_stream_title(livestreamInfo.getLive_stream_title());
+                    Logg.i("==================================frgHome====================== livestreamInfo.getLive_stream_title() :" + livestreamInfo.getLive_stream_title());
                     itemLiveData.setLive_stream_streamer_nick(livestreamInfo.getNick_name());
+                    Logg.i("==================================frgHome====================== livestreamInfo.getNick_name() :" + livestreamInfo.getNick_name());
                     itemLiveData.setLive_stream_tag(livestreamInfo.getLive_stream_tag());
+                    Logg.i("==================================frgHome====================== livestreamInfo.getLive_stream_tag() :" + livestreamInfo.getLive_stream_tag());
 
 
                     itemLiveDataArrayList.add(itemLiveData);
@@ -146,7 +156,7 @@ public class fragment_home extends Fragment {
             @Override
             public void onFailure(Call<List<LivestreamInfo>> call, Throwable t) {
                 Log.e(TAG, "onFailure: " + t.getMessage());
-                Logg.i("==================================frgHome========================");
+                Logg.i("==================================frgHome========================t.getMessage() : " + t.getMessage());
             }
         });
     }

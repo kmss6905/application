@@ -7,12 +7,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -23,7 +25,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.application.IPclass;
+import com.example.application.Logg;
 import com.example.application.R;
+import com.example.application.Retrofit2.Repo.AddLiveStream;
+import com.example.application.Retrofit2.RequestApi;
 import com.wowza.gocoder.sdk.api.WowzaGoCoder;
 import com.wowza.gocoder.sdk.api.broadcast.WOWZBroadcast;
 import com.wowza.gocoder.sdk.api.broadcast.WOWZBroadcastConfig;
@@ -37,7 +43,33 @@ import com.wowza.gocoder.sdk.api.status.WOWZState;
 import com.wowza.gocoder.sdk.api.status.WOWZStatus;
 import com.wowza.gocoder.sdk.api.status.WOWZStatusCallback;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.security.auth.login.LoginException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStatusCallback {
+    private static final String TAG = "LiveBroadcastActivity";
+    // 방송 제목, type, 태그 변수
+    public static String title;
+//    public static String type;
+    public static String btag;
+
+
+
+
+    //retrofit 통신
+    RequestApi requestApi;
+
+
 
 
     private WowzaGoCoder goCoder; // 상위 레벨의 GoCoder API 인터페이스
@@ -74,6 +106,7 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
     ImageButton btn_camera_reverse; // 카메라 앞뒤 바꾸기 버튼
     ImageButton btn_add_trip_info; // 여행정보 등록하기 버튼
     ImageButton btn_add_tilter; // 영상 필터 버튼
+    ImageButton btn_add_hashtag;
     ImageButton btn_start_broadcast; // 스트리밍 시작 버튼
     ImageButton btn_stop_broadcast; // 스트리밍 중지 버튼
     ImageButton btn_show_chat; // 채팅 보여주기 버튼
@@ -98,6 +131,14 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
         setContentView(R.layout.activity_live_broadcast);
 
 
+        // 레드로핏 객체 생성
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://" + IPclass.IP_ADDRESS + "/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        requestApi = retrofit.create(RequestApi.class);
+
 
 
 
@@ -112,6 +153,7 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
         btn_camera_reverse = findViewById(R.id.btn_camera_reverse); // 카메라 앞뒤 바꾸기 버튼
         btn_add_trip_info = findViewById(R.id.btn_add_trip_info); // 여행정보 등록하기 버튼
         btn_add_tilter = findViewById(R.id.btn_add_tilter); // 영상 필터 버튼
+        btn_add_hashtag = findViewById(R.id.btn_add_hashtag); // 해쉬태그 추가 버튼
         btn_start_broadcast = findViewById(R.id.btn_start_broadcast); // 스트리밍 시작 버튼
         btn_stop_broadcast = findViewById(R.id.btn_stop_broadcast); // 스트리밍 중지 버튼
         btn_show_chat = findViewById(R.id.btn_show_chat); // 채팅 보여주기 버튼
@@ -123,6 +165,11 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
         layout_chatting = findViewById(R.id.layout_chatting); // 채팅 레이아웃 ( btn_show_chat 누를 경우 채팅레이아웃 gone , 채팅버튼 공간 visibility)
         Chronometer_stream_time = findViewById(R.id.Chronometer_stream_time); // 시간 측정
         Chronometer_stream_time.setFormat("방송시간 : %s");
+
+
+
+        SharedPreferences sharedPreferences = getSharedPreferences("file", MODE_PRIVATE);
+        title = sharedPreferences.getString("id", "") + " 님의 여행방송입니다";
 
 
 
@@ -205,13 +252,20 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
                 } else {
                     // Start streaming
                     goCoderBroadcaster.startBroadcast(goCoderBroadcastConfig, goCoderBroadcaster.getStatusCallback());
+                    addLiveStream();
                     Toast.makeText(getApplicationContext(), "방송을 시작합니다", Toast.LENGTH_SHORT).show();
                     // 방송을 시작하면 버튼을 바꾼다. 녹화 버튼 이미지는 숨기고
                     btn_start_broadcast.setVisibility(View.GONE);
                     // 방송 멈추기 버튼을 보이게 한다.
                     btn_stop_broadcast.setVisibility(View.VISIBLE);
                     Chronometer_stream_time.setVisibility(View.VISIBLE);
-                    startChronometer();
+                    startChronometer(); // 방송 시간을 측정한다.
+
+                    /**
+                     *  방송이 시작되었을 경우 데이터 베이스에 방송제목, 방송 타입, 스트리머 닉네임num, 방송 태그, 방송 Url로 방송정보가 저장된다.
+                     *
+                     */
+
                 }
             }
         });
@@ -224,6 +278,7 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
                 if(goCoderBroadcaster.getStatus().isRunning()){ //현재 여전히 방송중이라면
                     goCoderBroadcaster.endBroadcast(goCoderBroadcaster.getStatusCallback()); //끈다
 //                    System.out.println(" 총 시간? " + goCoderBroadcaster.getBroadcastStatistics().timeElapsed);
+                    postQuitBroadcasting();
                     pauseChronometer(); // 시간초 멈춤
                     resetChronometer(); // 시간초 다시
                     btn_stop_broadcast.setVisibility(View.GONE); // 정지 버튼 안보이게 한후
@@ -282,6 +337,14 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
         });
 
 
+        // 해쉬태그 추가 버튼
+        btn_add_hashtag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editHashTagDialog();
+            }
+        });
+
 
 
                     // 타이틀 수정 버튼 + 테그등을 수정합니다.
@@ -291,6 +354,8 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
                             show(); // 방송제목을 수정할 수 있는 다이얼로그를 띄움
                         }
                     });
+
+
 
 
                     wowzCamera = this.goCoderCameraView.getCamera(); // WowzaCanera 객체를 만든다.
@@ -319,6 +384,8 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
                 }
             }
         });
+
+
 
 
         // 음소거 버튼
@@ -552,6 +619,7 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
 
 
     // 스트리밍 방송 제목 변경 다이얼로그 띄우기 함수
+
     void show() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
@@ -569,8 +637,17 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
         btn_change_title_ok.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 text_broadcast_title.setText(editText_change_title.getText().toString()); // 타이틀 제목을 수정한 타이틀로 바꾼다.
+                title = editText_change_title.getText().toString(); // 제목 저장
                 Toast.makeText(getApplicationContext(), "방송제목이 수정되었습니다.", Toast.LENGTH_SHORT).show();
-                goCoderBroadcastConfig.setStreamName(editText_change_title.getText().toString()); // 사용자가 수정한 타이틀을 받아옵니다.
+                goCoderBroadcastConfig.setStreamName(editText_change_title.getText().toString()); // 사용자가 수정한 타이틀을 넣습니다.
+
+                if(goCoderBroadcaster.getStatus().isRunning()){ //방송 중인 경우
+                    editSetting();
+                    dialog.dismiss();
+                    return;
+                }
+
+
                 dialog.dismiss();
             }
         });
@@ -578,6 +655,55 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
 
         // (다이얼로그) 타이틀 수정 취소버튼
         btn_change_title_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    //스트리밍 방송 태그 수정 다이얼로그
+    void editHashTagDialog(){
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_edit_tag, null);
+        builder.setView(view);
+        final Button btn_change_tag_cancel = (Button) view.findViewById(R.id.btn_change_tag_cancel);
+        final Button btn_change_tag_ok = (Button) view.findViewById(R.id.btn_change_tag_ok);
+        final EditText editText_tag = view.findViewById(R.id.editText_tag);
+
+        editText_tag.setText(btag);
+
+
+
+        // 태그 정보를 가져온다.
+
+        final AlertDialog dialog = builder.create();
+
+
+        // (다이얼로그) 태그 수정 확인 버튼
+        btn_change_tag_ok.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                btag = editText_tag.getText().toString(); // 전역에 입력하고
+
+                if(goCoderBroadcaster.getStatus().isRunning()){
+                    editSetting();
+                    Logg.i("===========================================test=====================");
+                    dialog.dismiss();
+                }
+
+                Toast.makeText(getApplicationContext(), "여행 태그가 추가되었습니다.", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+
+
+        // (다이얼로그) 타이틀 수정 취소버튼
+        btn_change_tag_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
@@ -632,4 +758,153 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
     }
 
 
+    // 라이브 방송 정보 추가하기 (네트워크)
+    void addLiveStream(){
+        SharedPreferences sharedPreferences = getSharedPreferences("file", MODE_PRIVATE);
+
+        //태그 , 타입, 제목, 아이디 를 파라미터로 서버로 보냄
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("id", sharedPreferences.getString("id", ""));
+
+        Logg.i("=================test==============라이브 방송 시작시 들어가는 정보들 in Parameters");
+
+
+        if(title == null){
+            title = "";
+            parameters.put("title", title);
+            Logg.i("=================test============== title : " + title);
+        }else{
+            parameters.put("title", title);
+            Logg.i("=================test============== title : " + title);
+        }
+
+
+        if(btag == null){
+            btag = "";
+            parameters.put("tag", btag);
+            Logg.i("=================test============== tag : " + btag);
+        }else{
+            parameters.put("tag", btag);
+            Logg.i("=================test============== tag : " + btag);
+        }
+
+
+
+
+
+        Call<AddLiveStream> addLiveStreamCall = requestApi.ADD_LIVE_STREAM_CALL(parameters);
+
+        addLiveStreamCall.enqueue(new Callback<AddLiveStream>() {
+            @Override
+            public void onResponse(Call<AddLiveStream> call, Response<AddLiveStream> response) {
+                if(!response.isSuccessful()){
+                    Log.e(TAG, "onResponse: " + response.message());
+                    Log.e(TAG, "onResponse: " + response. headers());
+                    return;
+                }
+                Logg.i("==========================test===========response.body(); : " + response.body());
+
+
+                AddLiveStream addLiveStream = response.body();
+
+                Logg.i("=================================test : " + response.code());
+                Logg.i("===================================test======post live stream success : " + addLiveStream.getResult());
+            }
+
+            @Override
+            public void onFailure(Call<AddLiveStream> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+    // 태그, 제목, 타입정보 수정
+    public void editSetting(){
+        SharedPreferences sharedPreferences = getSharedPreferences("file", MODE_PRIVATE);
+        Logg.i("============================================test=========================");
+
+
+        //태그 , 타입, 제목, 아이디 를 파라미터로 서버로 보냄
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("id", sharedPreferences.getString("id", ""));
+        parameters.put("title", title);
+        parameters.put("tag", btag);
+//        parameters.put("type", type);
+        Logg.i("===========================================test===================== id : " +  sharedPreferences.getString("id", ""));
+        Logg.i("=================================================test================ title : " + title);
+        Logg.i("=================================================test================ tag : " + btag);
+//        Logg.i("=================================================test================ type : " + type);
+
+
+        Call<AddLiveStream> EditLiveStream = requestApi.EDIT_LIVE_STREAM_CALL(parameters);
+        Logg.i("============================================test=========================");
+
+        EditLiveStream.enqueue(new Callback<AddLiveStream>() {
+            @Override
+            public void onResponse(Call<AddLiveStream> call, Response<AddLiveStream> response) {
+                if(!response.isSuccessful()){
+                    Logg.i("============================================test=========================");
+                    Log.e(TAG, "onResponse: " + response.message());
+                    return;
+                }
+
+                AddLiveStream editLiveStream = response.body();
+                Logg.i("============================================test=========================");
+                Logg.i("=================================================test=========== " + editLiveStream.getResult());
+                if(editLiveStream.getResult().equals("success")){
+                    Logg.i("============================================test=========================");
+                    Toast.makeText(getApplicationContext(), "방송 태그 정보를 수정하였습니다", Toast.LENGTH_SHORT).show();
+
+                }else{
+                    Logg.i("============================================test=========================");
+                    Toast.makeText(getApplicationContext(), "수정안됨 ㅠㅠ", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddLiveStream> call, Throwable t) {
+                Log.i(TAG, "onFailure: " + t.getMessage());
+                Logg.i("============================================test==================" + t.getMessage());
+
+            }
+        });
+    }
+
+    public void postQuitBroadcasting(){
+        SharedPreferences sharedPreferences = getSharedPreferences("file", MODE_PRIVATE);
+
+
+        Map<String,String> parameters = new HashMap<>();
+        parameters.put("id" ,sharedPreferences.getString("id", ""));
+
+        final Call<AddLiveStream> QuitLiveStream = requestApi.QUIT_LIVE_STREAM_CALL(parameters);
+
+        QuitLiveStream.enqueue(new Callback<AddLiveStream>() {
+            @Override
+            public void onResponse(Call<AddLiveStream> call, Response<AddLiveStream> response) {
+                if(!response.isSuccessful()){
+                    Log.e(TAG, "onResponse: " + response.message() );
+                    Logg.i("=================================test : " + response.code());
+                    return;
+                }
+
+                AddLiveStream quitliveStream = response.body();
+                Logg.i("=================================test : " + response.code());
+
+                if(quitliveStream.getResult().equals("success")){
+                    Logg.i("=================================방송종료 ");
+                }else{
+                    Logg.i("=================================방송종료 안됨 ");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddLiveStream> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+
+
+    }
 }

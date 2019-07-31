@@ -167,6 +167,13 @@
                     android:src="@mipmap/outline_chat_white_24"
                     android:backgroundTint="@android:color/transparent"/>
 
+                <ImageButton
+                    android:id="@+id/btn_add_hashtag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icons8_hashtag_24"
+                    android:backgroundTint="@android:color/transparent"/>
+
             </LinearLayout>
 
         </LinearLayout>
