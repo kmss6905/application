@@ -60,12 +60,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class HomeActivitiy extends AppCompatActivity {
     private static final String TAG = "HomeActivitiy";
 
+    SharedPreferences sharedPreferences;
+
+
     // 레트로핏 인터페이스
     RequestApi requestApi;
 
 
     Toolbar toolbar;
-    String nickname;
+    static String nickname;
 
 
     // DrawerLayout 에 있는 헤더 참조
@@ -77,8 +80,6 @@ public class HomeActivitiy extends AppCompatActivity {
 
 
 
-    String id;
-    Intent intent;  // 값을 받아오기 위한 intent
 
 
     // onBackPress 버튼 시간체크
@@ -102,14 +103,16 @@ public class HomeActivitiy extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        sharedPreferences = getSharedPreferences("file", MODE_PRIVATE);
+
 
         // 레트로핏
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://" + IPclass.IP_ADDRESS + "/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         requestApi = retrofit.create(RequestApi.class);
+
 
 
 
@@ -148,6 +151,7 @@ public class HomeActivitiy extends AppCompatActivity {
         nav_header_info_account = (ImageButton)nav_header_view.findViewById(R.id.btn_info_account);
 
 
+        GET_USER_INFO();
 
         // 프로필 화면으로 이동
         nav_header_info_account.setOnClickListener(new View.OnClickListener() {
@@ -167,9 +171,11 @@ public class HomeActivitiy extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()){
                     case R.id.nav_live:
+                        Log.i(TAG, "onNavigationItemSelected : nav_live " + nickname);
                         Toast.makeText(getApplicationContext(), "라이브 방송 클릭", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), LiveBroadcastActivity.class);
-//                        intent.putExtra("nickname", nickname);
+                        intent.putExtra("nickname", nickname);
+
                         startActivity(intent);
                         break;
                     case R.id.nav_vod:
@@ -290,23 +296,30 @@ public class HomeActivitiy extends AppCompatActivity {
     //===============================================================================서버 통신=============================================================================
 
     public void GET_USER_INFO(){
-        Call<USERINFO> GET_USER_INFO_CALL = requestApi.GET_USER_INFO();
+        Log.i(TAG, "GET_USER_INFO ");
+
+        Call<USERINFO> GET_USER_INFO_CALL = requestApi.GET_USER_INFO(sharedPreferences.getString("id", ""));
 
         GET_USER_INFO_CALL.enqueue(new Callback<USERINFO>() {
             @Override
             public void onResponse(Call<USERINFO> call, Response<USERINFO> response) {
                 if(!response.isSuccessful()){
                     Log.i(TAG, "onResponse " + response.message());
+                    Log.i(TAG, "onResponse / code ; " + response.code());
                     return;
                 }
 
                 USERINFO userinfo = response.body();
+                nickname = userinfo.getNick_name();
+                Log.i(TAG, "userinfo.getNick_name() : " + nickname);
+                nav_header_nick_name.setText(nickname);
+                nav_header_email.setText(nickname);
 
             }
 
             @Override
             public void onFailure(Call<USERINFO> call, Throwable t) {
-
+                Log.e(TAG, "onFailure: " + t.getMessage());
             }
         });
     }

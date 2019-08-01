@@ -118,7 +118,7 @@ public interface RequestApi {
 
 
     // GET LIVE BROADCAST WHOLE
-    @GET("GETS/BROADCAST/get.php")
+    @GET("GETS/BROADCAST/LIVE/get.php")
     Call<List<LIVEINFO>> GET_LIST_LIVE_STREAM_CALL();
 
 
@@ -126,7 +126,7 @@ public interface RequestApi {
 
     //GET USER INFO
     @GET("GETS/USER/get.php")
-    Call<USERINFO> GET_USER_INFO();
+    Call<USERINFO> GET_USER_INFO(@Query("id") String id);
 
 
 

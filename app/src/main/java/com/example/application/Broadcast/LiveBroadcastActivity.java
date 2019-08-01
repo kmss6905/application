@@ -68,7 +68,7 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
     SharedPreferences sharedPreferences;
 
     // 닉네임 가져옴
-    Intent intent = getIntent();
+    Intent intent;
 
 
     // routeStream 타이틀 만드는 클래스
@@ -155,6 +155,9 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
         setContentView(R.layout.activity_live_broadcast);
         sharedPreferences = getSharedPreferences("file", MODE_PRIVATE);
 
+
+        intent = getIntent();
+
         // 방송 타이틀, 태그, 제목, id
         title = intent.getStringExtra("nickname") + " 님이 현재 방송 중입니다"; // 타이틀
         tag = "현재 태그 없음"; // 태그
@@ -200,8 +203,7 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
         Chronometer_stream_time.setFormat("방송시간 : %s");
 
 
-
-//        title = sharedPreferences.getString("id", "") + " 님의 여행방송입니다";
+        text_broadcast_title.setText(title);
 
 
 
@@ -214,7 +216,7 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
          *  wowza goCoder sdk를 등록하고 초기화 합니다.
          */
 
-        goCoder = WowzaGoCoder.init(getApplicationContext(),"GOSK-B746-010C-E227-A534-0CE7");
+        goCoder = WowzaGoCoder.init(getApplicationContext(),"GOSK-BD46-010C-E552-981F-FF61");
 
 
 
@@ -320,13 +322,14 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
                     goCoderBroadcaster.endBroadcast(goCoderBroadcaster.getStatusCallback()); //끈다
 
 
-                    POST_LIVE_STREAM("delete.php");
                     pauseChronometer(); // 시간초 멈춤
                     resetChronometer(); // 시간초 다시
                     btn_stop_broadcast.setVisibility(View.GONE); // 정지 버튼 안보이게 한후
                     btn_start_broadcast.setVisibility(View.VISIBLE); // 방송 시작버튼 보이게함
                     Chronometer_stream_time.setVisibility(View.GONE); // 방송시간 버튼 없앰
                     Toast.makeText(getApplicationContext(), "방송을 종료합니다", Toast.LENGTH_SHORT).show();
+
+                    POST_LIVE_STREAM("delete.php");
 
                     // 방송이 종료되면 방송 시작시간과 방송종료 시간을 알 수 있으며 vod로 들어가게될 방송 제목 수정, 카테고리 수정, 후원받은 총 금액
                     // 최대 시청자 수 를 알 수 있다.
@@ -804,22 +807,34 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
 
     //===================================================================================네트워크 통신===================================================================================
     // POST_LIVE_STREAM
+
+
     /**
-     *
      * @param endpoint  => add.php / delete.php/ update.php
      */
     public void POST_LIVE_STREAM(String endpoint){
+
         Map<String,String> addLiveStreamParameters = new HashMap<>();
         addLiveStreamParameters.put("id", id);
         addLiveStreamParameters.put("title", title);
         addLiveStreamParameters.put("tag", tag);
         addLiveStreamParameters.put("route_stream", routeStream);
 
+        Log.i(TAG, "POST_LIVE_STREAM / id : " + id);
+        Log.i(TAG, "POST_LIVE_STREAM / title : " + title);
+        Log.i(TAG, "POST_LIVE_STREAM / tag : " + tag);
+        Log.i(TAG, "POST_LIVE_STREAM / route_stream : " + routeStream);
+
+
+
+
+
         Call<PostResult> postResultCall = requestApi.POST_LIVE_STREAM_CALL(addLiveStreamParameters, endpoint);
 
         postResultCall.enqueue(new Callback<PostResult>() {
             @Override
             public void onResponse(Call<PostResult> call, Response<PostResult> response) {
+
                 if(!response.isSuccessful()){
                     Log.i(TAG, "onResponse " + response.message());
                     return;

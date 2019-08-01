@@ -8,6 +8,16 @@ public class ItemLiveData {
     String live_stream_viewer;
     String live_stream_tag;
 
+    public String getLive_stream_route_stream() {
+        return live_stream_route_stream;
+    }
+
+    public void setLive_stream_route_stream(String live_stream_route_stream) {
+        this.live_stream_route_stream = live_stream_route_stream;
+    }
+
+    String live_stream_route_stream;
+
     public ItemLiveData(String live_stream_title, String live_stream_thumbnail, String live_stream_streamer_nick, String live_stream_tag) {
         this.live_stream_title = live_stream_title;
         this.live_stream_thumbnail = live_stream_thumbnail;

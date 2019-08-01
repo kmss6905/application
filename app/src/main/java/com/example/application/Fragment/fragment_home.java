@@ -21,9 +21,11 @@ import com.example.application.ItemData.ItemLiveData;
 import com.example.application.ItemData.ItemVodMiniData;
 import com.example.application.Logg;
 import com.example.application.R;
+import com.example.application.Retrofit2.Repo.GETS.BROADCAST.LIVEINFO;
 import com.example.application.Retrofit2.Repo.LivestreamInfo;
 import com.example.application.Retrofit2.RequestApi;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,9 +77,7 @@ public class fragment_home extends Fragment {
 
         requestApi = retrofit.create(RequestApi.class);
 
-
-
-        get_live_list();
+        GET_LIVEINFO();
 
 
 
@@ -113,56 +113,52 @@ public class fragment_home extends Fragment {
 
     //===================================================통신 메소드들=======================================
 
-    public void get_live_list(){
-        Call<List<LivestreamInfo>> call = requestApi.LIVE_STREAM_CALL();
 
-        Logg.i("==================================frgHome========================");
-        call.enqueue(new Callback<List<LivestreamInfo>>() {
+    // 라이브 리스트 가져오기
+    public void GET_LIVEINFO(){
+
+        Log.i(TAG, "GET_LIVEINFO: 1");
+        Call<List<LIVEINFO>> GET_LIVE_INFO_CALL = requestApi.GET_LIST_LIVE_STREAM_CALL();
+
+
+        GET_LIVE_INFO_CALL.enqueue(new Callback<List<LIVEINFO>>() {
             @Override
-            public void onResponse(Call<List<LivestreamInfo>> call, Response<List<LivestreamInfo>> response) {
+            public void onResponse(Call<List<LIVEINFO>> call, Response<List<LIVEINFO>> response) {
                 if(!response.isSuccessful()){
-                    Logg.i("==================================frgHome========================");
-                    Log.e(TAG, "onResponse: " + response.message() );
-                    Logg.i("==================================frgHome========================");
+                    Log.i(TAG, "onResponse " + response.message());
                     return;
                 }
 
-                Logg.i("==================================frgHome========================");
+                if(response.body().toString().equals("[null]")){
+                    return;
+                }
+
+                Log.i(TAG, "GET_LIVEINFO: 2" + response.body().toString());
+                List<LIVEINFO> liveinfos = response.body();
+                Log.i(TAG, "GET_LIVEINFO: 3" + response.body().toString());
 
 
-                List<LivestreamInfo> livestreamInfos = response.body();
 
+                for(LIVEINFO liveinfo : liveinfos){
 
-                Logg.i("==================================frgHome========================");
-                System.out.println("response.code : " + response.code());
-                Logg.i("==================================frgHome========================");
-
-
-                for(LivestreamInfo livestreamInfo : livestreamInfos){
-                    Logg.i("==================================frgHome========================");
                     ItemLiveData itemLiveData = new ItemLiveData();
-                    Logg.i("==================================frgHome========================");
-                    itemLiveData.setLive_stream_title(livestreamInfo.getLive_stream_title());
-                    Logg.i("==================================frgHome====================== livestreamInfo.getLive_stream_title() :" + livestreamInfo.getLive_stream_title());
-                    itemLiveData.setLive_stream_streamer_nick(livestreamInfo.getNick_name());
-                    Logg.i("==================================frgHome====================== livestreamInfo.getNick_name() :" + livestreamInfo.getNick_name());
-                    itemLiveData.setLive_stream_tag(livestreamInfo.getLive_stream_tag());
-                    Logg.i("==================================frgHome====================== livestreamInfo.getLive_stream_tag() :" + livestreamInfo.getLive_stream_tag());
-
+                    itemLiveData.setLive_stream_title(liveinfo.getLive_stream_title());
+                    Log.i(TAG, "onResponse: liveinfo.getLive_stream_title() : " + liveinfo.getLive_stream_title());
+                    itemLiveData.setLive_stream_tag(liveinfo.getLive_stream_tag());
+                    Log.i(TAG, "onResponse: liveinfo.getLive_stream_tag(): " + liveinfo.getLive_stream_tag());
+                    itemLiveData.setLive_stream_streamer_nick(liveinfo.getNick_name());
+                    Log.i(TAG, "onResponse: liveinfo.getNick_name() : " + liveinfo.getNick_name());
 
                     itemLiveDataArrayList.add(itemLiveData);
 
                 }
 
                 adapterLIVEitem.notifyDataSetChanged();
-
-
             }
 
             @Override
-            public void onFailure(Call<List<LivestreamInfo>> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t.getMessage());
-                Logg.i("==================================frgHome========================t.getMessage() : " + t.getMessage());
+            public void onFailure(Call<List<LIVEINFO>> call, Throwable t) {
+                Log.i(TAG, "onFailure: " + t.getMessage());
             }
         });
     }
