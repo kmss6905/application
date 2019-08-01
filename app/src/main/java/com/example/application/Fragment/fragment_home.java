@@ -82,7 +82,7 @@ public class fragment_home extends Fragment {
 
 
         recyclerView_hot_live_list = rootView.findViewById(R.id.recyclerView_hot_live_list);
-        recyclerView_hot_live_list.setHasFixedSize(true);//??
+        recyclerView_hot_live_list.setHasFixedSize(true); //??
 
 
 
@@ -100,6 +100,12 @@ public class fragment_home extends Fragment {
 
         return rootView;
     }
+
+
+
+
+
+
 
 
 

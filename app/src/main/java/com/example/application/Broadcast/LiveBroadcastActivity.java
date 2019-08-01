@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -26,10 +27,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.application.IPclass;
+import com.example.application.ItemData.ItemLiveData;
 import com.example.application.Logg;
 import com.example.application.R;
 import com.example.application.Retrofit2.Repo.AddLiveStream;
+import com.example.application.Retrofit2.Repo.LivestreamInfo;
+import com.example.application.Retrofit2.Repo.PostResult;
 import com.example.application.Retrofit2.RequestApi;
+import com.example.application.UuidTest;
 import com.wowza.gocoder.sdk.api.WowzaGoCoder;
 import com.wowza.gocoder.sdk.api.broadcast.WOWZBroadcast;
 import com.wowza.gocoder.sdk.api.broadcast.WOWZBroadcastConfig;
@@ -58,10 +63,29 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStatusCallback {
     private static final String TAG = "LiveBroadcastActivity";
-    // 방송 제목, type, 태그 변수
-    public static String title;
-//    public static String type;
-    public static String btag;
+
+    //SharedPerferences 에서 ID 를 가져옵니다.
+    SharedPreferences sharedPreferences;
+
+    // 닉네임 가져옴
+    Intent intent = getIntent();
+
+
+    // routeStream 타이틀 만드는 클래스
+    UuidTest uuidTest = new UuidTest();
+
+
+    /**
+     *  방송 타이틀, 테그, id값,
+     */
+    String title;
+    String tag;
+    String id;
+    String routeStream;
+
+
+
+
 
 
 
@@ -129,6 +153,14 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_broadcast);
+        sharedPreferences = getSharedPreferences("file", MODE_PRIVATE);
+
+        // 방송 타이틀, 태그, 제목, id
+        title = intent.getStringExtra("nickname") + " 님이 현재 방송 중입니다"; // 타이틀
+        tag = "현재 태그 없음"; // 태그
+        routeStream = uuidTest.getUnicVodString(); // 루트 스트림
+        id = sharedPreferences.getString("id", ""); // pri ID
+
 
 
         // 레드로핏 객체 생성
@@ -136,8 +168,9 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
                 .baseUrl("http://" + IPclass.IP_ADDRESS + "/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
         requestApi = retrofit.create(RequestApi.class);
+
+
 
 
 
@@ -168,8 +201,12 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
 
 
 
-        SharedPreferences sharedPreferences = getSharedPreferences("file", MODE_PRIVATE);
-        title = sharedPreferences.getString("id", "") + " 님의 여행방송입니다";
+//        title = sharedPreferences.getString("id", "") + " 님의 여행방송입니다";
+
+
+
+
+
 
 
 
@@ -223,7 +260,8 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
         goCoderBroadcastConfig.setHostAddress("13.209.208.103");
         goCoderBroadcastConfig.setPortNumber(1935);
         goCoderBroadcastConfig.setApplicationName("live");
-        goCoderBroadcastConfig.setStreamName(text_broadcast_title.getText().toString()); // 사용자가 수정한 타이틀을 받아옵니다.
+        goCoderBroadcastConfig.setStreamName(new UuidTest().getUnicVodString()); // 사용자가 수정한 타이틀을 받아옵니다. 문제가 있다. 한글로 타이틀을 정할 경우 나중에 동영상 녹화시에 해당 타이틀.mp4 에서 한글의 경우 깨진다. 따라서 vor가 저장된 경로를 찾을 수 없게 된다
+
         goCoderBroadcastConfig.setAudioEnabled(true);
         goCoderBroadcastConfig.setVideoEnabled(true);
         goCoderBroadcastConfig.setUsername("wowza");
@@ -252,7 +290,6 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
                 } else {
                     // Start streaming
                     goCoderBroadcaster.startBroadcast(goCoderBroadcastConfig, goCoderBroadcaster.getStatusCallback());
-                    addLiveStream();
                     Toast.makeText(getApplicationContext(), "방송을 시작합니다", Toast.LENGTH_SHORT).show();
                     // 방송을 시작하면 버튼을 바꾼다. 녹화 버튼 이미지는 숨기고
                     btn_start_broadcast.setVisibility(View.GONE);
@@ -266,6 +303,10 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
                      *
                      */
 
+
+                    // POST ADD
+                    POST_LIVE_STREAM("add.php");
+
                 }
             }
         });
@@ -277,8 +318,9 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
             public void onClick(View view) {
                 if(goCoderBroadcaster.getStatus().isRunning()){ //현재 여전히 방송중이라면
                     goCoderBroadcaster.endBroadcast(goCoderBroadcaster.getStatusCallback()); //끈다
-//                    System.out.println(" 총 시간? " + goCoderBroadcaster.getBroadcastStatistics().timeElapsed);
-                    postQuitBroadcasting();
+
+
+                    POST_LIVE_STREAM("delete.php");
                     pauseChronometer(); // 시간초 멈춤
                     resetChronometer(); // 시간초 다시
                     btn_stop_broadcast.setVisibility(View.GONE); // 정지 버튼 안보이게 한후
@@ -619,17 +661,23 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
 
 
     // 스트리밍 방송 제목 변경 다이얼로그 띄우기 함수
+    // 방송 전이면 그냥 전역에 저장
 
     void show() {
+
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_broadcast_setting, null);
         builder.setView(view);
+
+
         final Button btn_change_title_cancel = (Button) view.findViewById(R.id.btn_change_title_cancel);
         final Button btn_change_title_ok = (Button) view.findViewById(R.id.btn_change_title_ok);
         final EditText editText_change_title = view.findViewById(R.id.editText_nick);
-        editText_change_title.setText(text_broadcast_title.getText().toString()); //수정이기 때문에 우선 타이틀을 가져온다.
 
+
+        editText_change_title.setText(text_broadcast_title.getText().toString()); //수정이기 때문에 우선 타이틀을 가져온다.
         final AlertDialog dialog = builder.create();
 
 
@@ -642,7 +690,7 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
                 goCoderBroadcastConfig.setStreamName(editText_change_title.getText().toString()); // 사용자가 수정한 타이틀을 넣습니다.
 
                 if(goCoderBroadcaster.getStatus().isRunning()){ //방송 중인 경우
-                    editSetting();
+                    POST_LIVE_STREAM("update.php");
                     dialog.dismiss();
                     return;
                 }
@@ -676,11 +724,10 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
         final Button btn_change_tag_ok = (Button) view.findViewById(R.id.btn_change_tag_ok);
         final EditText editText_tag = view.findViewById(R.id.editText_tag);
 
-        editText_tag.setText(btag);
+        editText_tag.setText(tag);
 
 
 
-        // 태그 정보를 가져온다.
 
         final AlertDialog dialog = builder.create();
 
@@ -688,10 +735,10 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
         // (다이얼로그) 태그 수정 확인 버튼
         btn_change_tag_ok.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                btag = editText_tag.getText().toString(); // 전역에 입력하고
+                tag= editText_tag.getText().toString(); // 전역에 입력하고
 
                 if(goCoderBroadcaster.getStatus().isRunning()){
-                    editSetting();
+                    POST_LIVE_STREAM("update.php");
                     Logg.i("===========================================test=====================");
                     dialog.dismiss();
                 }
@@ -712,11 +759,6 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
 
         dialog.show();
     }
-
-
-
-
-
 
 
     // 방송 종료 경고 알림창
@@ -758,153 +800,49 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
     }
 
 
-    // 라이브 방송 정보 추가하기 (네트워크)
-    void addLiveStream(){
-        SharedPreferences sharedPreferences = getSharedPreferences("file", MODE_PRIVATE);
-
-        //태그 , 타입, 제목, 아이디 를 파라미터로 서버로 보냄
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("id", sharedPreferences.getString("id", ""));
-
-        Logg.i("=================test==============라이브 방송 시작시 들어가는 정보들 in Parameters");
 
 
-        if(title == null){
-            title = "";
-            parameters.put("title", title);
-            Logg.i("=================test============== title : " + title);
-        }else{
-            parameters.put("title", title);
-            Logg.i("=================test============== title : " + title);
-        }
+    //===================================================================================네트워크 통신===================================================================================
+    // POST_LIVE_STREAM
+    /**
+     *
+     * @param endpoint  => add.php / delete.php/ update.php
+     */
+    public void POST_LIVE_STREAM(String endpoint){
+        Map<String,String> addLiveStreamParameters = new HashMap<>();
+        addLiveStreamParameters.put("id", id);
+        addLiveStreamParameters.put("title", title);
+        addLiveStreamParameters.put("tag", tag);
+        addLiveStreamParameters.put("route_stream", routeStream);
 
+        Call<PostResult> postResultCall = requestApi.POST_LIVE_STREAM_CALL(addLiveStreamParameters, endpoint);
 
-        if(btag == null){
-            btag = "";
-            parameters.put("tag", btag);
-            Logg.i("=================test============== tag : " + btag);
-        }else{
-            parameters.put("tag", btag);
-            Logg.i("=================test============== tag : " + btag);
-        }
-
-
-
-
-
-        Call<AddLiveStream> addLiveStreamCall = requestApi.ADD_LIVE_STREAM_CALL(parameters);
-
-        addLiveStreamCall.enqueue(new Callback<AddLiveStream>() {
+        postResultCall.enqueue(new Callback<PostResult>() {
             @Override
-            public void onResponse(Call<AddLiveStream> call, Response<AddLiveStream> response) {
+            public void onResponse(Call<PostResult> call, Response<PostResult> response) {
                 if(!response.isSuccessful()){
-                    Log.e(TAG, "onResponse: " + response.message());
-                    Log.e(TAG, "onResponse: " + response. headers());
+                    Log.i(TAG, "onResponse " + response.message());
                     return;
                 }
-                Logg.i("==========================test===========response.body(); : " + response.body());
 
+                PostResult postResult = response.body();
 
-                AddLiveStream addLiveStream = response.body();
-
-                Logg.i("=================================test : " + response.code());
-                Logg.i("===================================test======post live stream success : " + addLiveStream.getResult());
+                if(postResult.getResult().equals("success")){ //성공적으로 방송 POST_ADD 성공
+                    Toast.makeText(getApplicationContext(), "방송정보저장", Toast.LENGTH_SHORT).show();
+                }else{ // 방송 POST_ADD 실패
+                    Toast.makeText(getApplicationContext(), "방송정보저장실패", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
-            public void onFailure(Call<AddLiveStream> call, Throwable t) {
+            public void onFailure(Call<PostResult> call, Throwable t) {
 
             }
         });
     }
 
-
-    // 태그, 제목, 타입정보 수정
-    public void editSetting(){
-        SharedPreferences sharedPreferences = getSharedPreferences("file", MODE_PRIVATE);
-        Logg.i("============================================test=========================");
-
-
-        //태그 , 타입, 제목, 아이디 를 파라미터로 서버로 보냄
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("id", sharedPreferences.getString("id", ""));
-        parameters.put("title", title);
-        parameters.put("tag", btag);
-//        parameters.put("type", type);
-        Logg.i("===========================================test===================== id : " +  sharedPreferences.getString("id", ""));
-        Logg.i("=================================================test================ title : " + title);
-        Logg.i("=================================================test================ tag : " + btag);
-//        Logg.i("=================================================test================ type : " + type);
-
-
-        Call<AddLiveStream> EditLiveStream = requestApi.EDIT_LIVE_STREAM_CALL(parameters);
-        Logg.i("============================================test=========================");
-
-        EditLiveStream.enqueue(new Callback<AddLiveStream>() {
-            @Override
-            public void onResponse(Call<AddLiveStream> call, Response<AddLiveStream> response) {
-                if(!response.isSuccessful()){
-                    Logg.i("============================================test=========================");
-                    Log.e(TAG, "onResponse: " + response.message());
-                    return;
-                }
-
-                AddLiveStream editLiveStream = response.body();
-                Logg.i("============================================test=========================");
-                Logg.i("=================================================test=========== " + editLiveStream.getResult());
-                if(editLiveStream.getResult().equals("success")){
-                    Logg.i("============================================test=========================");
-                    Toast.makeText(getApplicationContext(), "방송 태그 정보를 수정하였습니다", Toast.LENGTH_SHORT).show();
-
-                }else{
-                    Logg.i("============================================test=========================");
-                    Toast.makeText(getApplicationContext(), "수정안됨 ㅠㅠ", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AddLiveStream> call, Throwable t) {
-                Log.i(TAG, "onFailure: " + t.getMessage());
-                Logg.i("============================================test==================" + t.getMessage());
-
-            }
-        });
-    }
-
-    public void postQuitBroadcasting(){
-        SharedPreferences sharedPreferences = getSharedPreferences("file", MODE_PRIVATE);
-
-
-        Map<String,String> parameters = new HashMap<>();
-        parameters.put("id" ,sharedPreferences.getString("id", ""));
-
-        final Call<AddLiveStream> QuitLiveStream = requestApi.QUIT_LIVE_STREAM_CALL(parameters);
-
-        QuitLiveStream.enqueue(new Callback<AddLiveStream>() {
-            @Override
-            public void onResponse(Call<AddLiveStream> call, Response<AddLiveStream> response) {
-                if(!response.isSuccessful()){
-                    Log.e(TAG, "onResponse: " + response.message() );
-                    Logg.i("=================================test : " + response.code());
-                    return;
-                }
-
-                AddLiveStream quitliveStream = response.body();
-                Logg.i("=================================test : " + response.code());
-
-                if(quitliveStream.getResult().equals("success")){
-                    Logg.i("=================================방송종료 ");
-                }else{
-                    Logg.i("=================================방송종료 안됨 ");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AddLiveStream> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t.getMessage());
-            }
-        });
-
+    //POST_VOD_ADD
+    public void POST_VOD_STREAM(String endpoint){
 
     }
 }

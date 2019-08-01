@@ -4,8 +4,11 @@ import com.example.application.Account.ManagePasswordActivity;
 import com.example.application.Retrofit2.Repo.Account;
 import com.example.application.Retrofit2.Repo.AddLiveStream;
 import com.example.application.Retrofit2.Repo.CheckNickResult;
+import com.example.application.Retrofit2.Repo.GETS.BROADCAST.LIVEINFO;
+import com.example.application.Retrofit2.Repo.GETS.USERS.USERINFO;
 import com.example.application.Retrofit2.Repo.LivestreamInfo;
 import com.example.application.Retrofit2.Repo.Password;
+import com.example.application.Retrofit2.Repo.PostResult;
 
 import java.util.List;
 import java.util.Map;
@@ -72,10 +75,10 @@ public interface RequestApi {
 
 
 
-    // 방송 시작
-    @FormUrlEncoded
-    @POST("postlivestream.php")
-    Call<AddLiveStream> ADD_LIVE_STREAM_CALL(@FieldMap Map<String, String> parameters);
+//    // 방송 시작
+//    @FormUrlEncoded
+//    @POST("postlivestream.php")
+//    Call<AddLiveStream> ADD_LIVE_STREAM_CALL(@FieldMap Map<String, String> parameters);
 
 
     // 방송 수정
@@ -88,5 +91,59 @@ public interface RequestApi {
     @FormUrlEncoded
     @POST("quitBroadCast.php")
     Call<AddLiveStream> QUIT_LIVE_STREAM_CALL(@FieldMap Map<String, String> parameters);
+
+
+
+
+
+
+    // POST LIVE BROADCAST
+    /**
+     *
+     * @param parameters title, id, type, tag, routeStream,
+     * @param endpoint  add.php(방송 추가) , delete.php(방송 삭제), update.php(방송 수정
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("POSTS/BROADCAST/LIVE/{endpoint}")
+    Call<PostResult> POST_LIVE_STREAM_CALL(@FieldMap Map<String, String> parameters, @Path("endpoint") String endpoint);
+
+
+    //POST_VOD_BROADCAST
+    @FormUrlEncoded
+    @POST("POSTS/BROADCAST/VOD/{endpoint}")
+    Call<PostResult> POST_VOD_STREAM_CALL(@FieldMap Map<String, String> parameters, @Path("endpoint") String endpoint);
+
+
+
+
+    // GET LIVE BROADCAST WHOLE
+    @GET("GETS/BROADCAST/get.php")
+    Call<List<LIVEINFO>> GET_LIST_LIVE_STREAM_CALL();
+
+
+
+
+    //GET USER INFO
+    @GET("GETS/USER/get.php")
+    Call<USERINFO> GET_USER_INFO();
+
+
+
+
+
+
+
+    // live 방송 수정
+    // live 방송 종료(삭제)
+
+
+
+
+
+
+    // vod  방송 시작(추가)
+    // vod 방송 수정
+    // vod 방송 종료(삭제)
 
 }

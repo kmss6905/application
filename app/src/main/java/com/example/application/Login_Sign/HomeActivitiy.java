@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,6 +33,8 @@ import com.example.application.Fragment.fragment_account;
 import com.example.application.IPclass;
 import com.example.application.Logg;
 import com.example.application.R;
+import com.example.application.Retrofit2.Repo.GETS.USERS.USERINFO;
+import com.example.application.Retrofit2.RequestApi;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -47,10 +50,19 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class HomeActivitiy extends AppCompatActivity {
     private static final String TAG = "HomeActivitiy";
+
+    // 레트로핏 인터페이스
+    RequestApi requestApi;
+
 
     Toolbar toolbar;
     String nickname;
@@ -91,7 +103,13 @@ public class HomeActivitiy extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        // 레트로핏
 
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://" + IPclass.IP_ADDRESS + "/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        requestApi = retrofit.create(RequestApi.class);
 
 
 
@@ -110,19 +128,6 @@ public class HomeActivitiy extends AppCompatActivity {
 
 
 
-//        btn_info_account = findViewById(R.id.btn_info_account);
-
-//
-//        // nav_header 의 개인정보 상세보기 버튼 클릭
-//        btn_info_account.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(getApplicationContext(), "클릭중", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-
-
 
 
 
@@ -134,8 +139,9 @@ public class HomeActivitiy extends AppCompatActivity {
         toggle.syncState();
 
 
-        // NavigationView의 nav_header_view 의 값을 바꾸기 위해서는 getHeaderView 함수를 이용한다.
 
+
+        // NavigationView의 nav_header_view 의 값을 바꾸기 위해서는 getHeaderView 함수를 이용한다.
         View nav_header_view = navigationView.getHeaderView(0);
         nav_header_email = (TextView)nav_header_view.findViewById(R.id.textView_email);
         nav_header_nick_name = (TextView)nav_header_view.findViewById(R.id.textView_nickname);
@@ -163,8 +169,8 @@ public class HomeActivitiy extends AppCompatActivity {
                     case R.id.nav_live:
                         Toast.makeText(getApplicationContext(), "라이브 방송 클릭", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), LiveBroadcastActivity.class);
+//                        intent.putExtra("nickname", nickname);
                         startActivity(intent);
-
                         break;
                     case R.id.nav_vod:
                         Toast.makeText(getApplicationContext(), "vod 방송 올리기", Toast.LENGTH_SHORT).show();
@@ -229,180 +235,23 @@ public class HomeActivitiy extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        intent = getIntent();
-        Logg.i("-------------------------TEST--------------------");
-        id = intent.getStringExtra("id");
-        Logg.i("------------------------TEST---------------------- id : " + id);
-        String strUrl = "http://" + IPclass.IP_ADDRESS + "/main/main.php";
-        RequsetAccount requsetAccount = new RequsetAccount();
-        requsetAccount.execute(strUrl, id); //접속할 서버주소와 아이디를 key 값인 id를 넘긴다.
-    }
-
-    //--------------------------------------------------서버 요청---------------------------------------------
-    class RequsetAccount extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            String param_strUrl = params[0];
-            String param_id = params[1];
-
-            Logg.i("-------------------------TEST----------------------" + "id : " + param_id + "// strurl : " + param_strUrl);
-
-            String postParameter = "id=" + param_id;
-
-            Logg.i("--------------------------TEST-------------------" + "postParameter : " + postParameter);
-
-
-
-            try{
-                URL url = new URL(param_strUrl);
-                HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-                Logg.i("--------------------TEST-----------------");
-
-                httpURLConnection.setRequestMethod("POST");
-                Logg.i("--------------------TEST-----------------");
-                httpURLConnection.setConnectTimeout(5000);
-                Logg.i("--------------------TEST-----------------");
-                httpURLConnection.setReadTimeout(5000);
-                Logg.i("--------------------TEST-----------------");
-                httpURLConnection.setDoInput(true); //?
-                Logg.i("--------------------TEST-----------------");
-                httpURLConnection.setDoOutput(true);
-                Logg.i("--------------------TEST-----------------");
-                httpURLConnection.connect();
-                Logg.i("--------------------TEST-----------------");
-
-
-                OutputStream outputStream = httpURLConnection.getOutputStream();
-                Logg.i("--------------------TEST-----------------");
-
-                outputStream.write(postParameter.getBytes("UTF-8"));
-                Logg.i("--------------------TEST-----------------");
-                outputStream.flush();
-                Logg.i("--------------------TEST-----------------");
-                outputStream.close();
-                Logg.i("--------------------TEST-----------------");
-
-
-                Logg.i("--------------------TEST-----------------");
-                int requsetStatus = httpURLConnection.getResponseCode();
-                Logg.i("--------------------TEST-----------------");
-
-                InputStream inputStream;
-
-                if(requsetStatus == HttpURLConnection.HTTP_OK){
-                    Logg.i("--------------------TEST-----------------");
-                    inputStream = httpURLConnection.getInputStream();
-                    Logg.i("--------------------TEST-----------------응답코드 : " + requsetStatus);
-                }else{
-                    Logg.i("--------------------TEST-----------------");
-                    inputStream = httpURLConnection.getErrorStream();
-                    Logg.i("--------------------TEST-----------------");
-                }
-                Logg.i("--------------------TEST-----------------");
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
-                Logg.i("--------------------TEST-----------------");
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                Logg.i("--------------------TEST-----------------");
-
-                StringBuffer stringBuffer = new StringBuffer();
-                Logg.i("--------------------TEST-----------------");
-                String line = null;
-                Logg.i("--------------------TEST-----------------");
-
-                Logg.i("--------------------TEST-----------------");
-
-                while((line = bufferedReader.readLine()) != null){
-                    Logg.i("--------------------TEST-----------------");
-                    stringBuffer.append(line);
-                    Logg.i("--------------------TEST-----------------");
-                }
-
-                Logg.i("--------------------TEST-----------------");
-                bufferedReader.close();
-                Logg.i("--------------------TEST-----------------");
-                System.out.println("가져온 값 : " + stringBuffer.toString());
-                Logg.i("--------------------TEST-----------------");
-
-                return  stringBuffer.toString();
-
-
-            }catch (Exception e){
-                e.getMessage();
-                Logg.i("---------------------TEST--------------------" + e.getMessage());
-                return  e.getMessage();
-            }
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            super.onPostExecute(response);
-
-            Logg.i("--------------TEST---------------- response : " + response);
-
-            try {
-                JSONObject jsonObject =new JSONObject(response);
-                System.out.println("jsonObject.getString(\"user_email\") : " +jsonObject.getString("user_email"));
-                System.out.println("jsonObject.getString(\"nick_name\"); : "+ jsonObject.getString("nick_name"));
-
-                /*
-                전달 받은 것을 넣어주자
-                 */
-
-
-                /**
-                 *
-                 * 우선 발표
-                 * 모든 버튼이 있으면 이상하니까
-                 *
-                 */
-                Logg.i("--------------------무엇을 가져올까?--------------- jsonObject.getString(\"sns\").equals(\"kakao\") : " + jsonObject.getString("sns").equals("kakao"));
-
-
-                if(!(jsonObject.getString("sns").equals(""))){
-                    jsonObject.getString("sns");
-                    Logg.i("--------------TEST----------------- user_email" + jsonObject.getString("user_email"));
-                }
-                nav_header_nick_name.setText(jsonObject.getString("nick_name"));
-                nickname = jsonObject.getString("nick_name");
-
-                Logg.i("--------------TEST----------------- nick name : " + jsonObject.getString("nicK_name"));
-                nav_header_email.setText(jsonObject.getString("user_email"));
-
-                Logg.i("--------------TEST----------------- sns : " + jsonObject.getString("sns"));
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        intent = getIntent();
+//        Logg.i("-------------------------TEST--------------------");
+//        id = intent.getStringExtra("id");
+//        Logg.i("------------------------TEST---------------------- id : " + id);
+//        String strUrl = "http://" + IPclass.IP_ADDRESS + "/main/main.php";
+//        RequsetAccount requsetAccount = new RequsetAccount();
+//        requsetAccount.execute(strUrl, id); //접속할 서버주소와 아이디를 key 값인 id를 넘긴다.
+//    }
 
 
 
 
 
-                // 저장한다.
-                SharedPreferences sharedPreferences = getSharedPreferences("file", MODE_PRIVATE);
-                Logg.i("--------------------test---------------------");
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                Logg.i("--------------------test---------------------");
-                Logg.i("--------------------test--------------------- id :" + id);
-                editor.putString("id", id);
-                Logg.i("--------------------test---------------------");
-                editor.commit();
-                Logg.i("--------------------test---------------------");
 
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
 
 
 
@@ -435,5 +284,30 @@ public class HomeActivitiy extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    //===============================================================================서버 통신=============================================================================
+
+    public void GET_USER_INFO(){
+        Call<USERINFO> GET_USER_INFO_CALL = requestApi.GET_USER_INFO();
+
+        GET_USER_INFO_CALL.enqueue(new Callback<USERINFO>() {
+            @Override
+            public void onResponse(Call<USERINFO> call, Response<USERINFO> response) {
+                if(!response.isSuccessful()){
+                    Log.i(TAG, "onResponse " + response.message());
+                    return;
+                }
+
+                USERINFO userinfo = response.body();
+
+            }
+
+            @Override
+            public void onFailure(Call<USERINFO> call, Throwable t) {
+
+            }
+        });
     }
 }
