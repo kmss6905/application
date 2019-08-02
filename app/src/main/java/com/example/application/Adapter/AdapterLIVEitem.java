@@ -2,7 +2,10 @@ package com.example.application.Adapter;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -14,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.application.ItemData.ItemLiveData;
 import com.example.application.R;
 
@@ -29,7 +33,7 @@ public class AdapterLIVEitem extends RecyclerView.Adapter<AdapterLIVEitem.LiveIt
 
 
     public interface ItemClick{
-        public void onClick(View view, int position);
+        public void onClick(View view, int position, int i);
     }
 
     //아이템 클릭시 실행 함수 등록 함수
@@ -70,32 +74,33 @@ public class AdapterLIVEitem extends RecyclerView.Adapter<AdapterLIVEitem.LiveIt
 
 //        "http://13.209.208.103:8086/transcoderthumbnail?application=live&streamname=" + eaca672afc494c1994adbb36f76490d2 + "&size=640x360&fitmode=letterbox";
 
-//        // 썸네일 넣음
-//        Glide.with(mcontext).load(
-//                "http://13.209.208.103:8086/transcoderthumbnail?application=live&streamname="
-//                        + itemLiveDataArrayList.get(position).getLive_stream_route_stream()
-//                        + "&size=640x360&fitmode=letterbox").into(holder.imageView_thumbnail_liveStream);
+        // 썸네일 넣음
+        Glide.with(mcontext).load(
+                "http://13.209.208.103:8086/transcoderthumbnail?application=live&streamname="
+                        + itemLiveDataArrayList.get(position).getLive_stream_route_stream()
+                        + "&size=640x360&fitmode=letterbox").diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(holder.imageView_thumbnail_liveStream);
 
 
 
 
-        // 아이템 메뉴 클릭
+        // 아이템 메뉴 클릭 : 2
         holder.btn_menu_liveStream.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(itemClick != null){
-                    itemClick.onClick(view, position);
+                    itemClick.onClick(view, position,2);
                 }
             }
         });
 
 
-        // 방송 아이템 클릭
+
+        // 방송 아이템 클릭 : 1
         holder.item_layout_liveStream.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(itemClick != null){
-                    itemClick.onClick(view, position);
+                    itemClick.onClick(view, position, 1);
                 }
             }
         });
@@ -133,6 +138,7 @@ public class AdapterLIVEitem extends RecyclerView.Adapter<AdapterLIVEitem.LiveIt
             textView_tag_liveStream = itemView.findViewById(R.id.textView_tag_liveStream);
             btn_menu_liveStream = itemView.findViewById(R.id.btn_menu_liveStream);
             imageView_thumbnail_liveStream = itemView.findViewById(R.id.imageView_thumbnail_liveStream);
+
         }
     }
 }

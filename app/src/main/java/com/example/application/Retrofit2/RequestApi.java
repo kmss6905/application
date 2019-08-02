@@ -5,6 +5,8 @@ import com.example.application.Retrofit2.Repo.Account;
 import com.example.application.Retrofit2.Repo.AddLiveStream;
 import com.example.application.Retrofit2.Repo.CheckNickResult;
 import com.example.application.Retrofit2.Repo.GETS.BROADCAST.LIVEINFO;
+import com.example.application.Retrofit2.Repo.GETS.SUBSCRIBE.GET_REPO_CHECK;
+import com.example.application.Retrofit2.Repo.GETS.SUBSCRIBE.SUBCRIBE;
 import com.example.application.Retrofit2.Repo.GETS.USERS.USERINFO;
 import com.example.application.Retrofit2.Repo.LivestreamInfo;
 import com.example.application.Retrofit2.Repo.Password;
@@ -15,6 +17,7 @@ import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -97,7 +100,7 @@ public interface RequestApi {
 
 
 
-    // POST LIVE BROADCAST
+    // POST LIVE BROADCAST ( 스트리머 )
     /**
      *
      * @param parameters title, id, type, tag, routeStream,
@@ -115,11 +118,30 @@ public interface RequestApi {
     Call<PostResult> POST_VOD_STREAM_CALL(@FieldMap Map<String, String> parameters, @Path("endpoint") String endpoint);
 
 
+    // POST LIVE BROADCAST ( 시청자 )
+
+
+    //POST LIVE BROADCAST
+    /**
+     *
+     * @param parameters
+     * @param endpoint
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("POSTS/BROADCAST/LIVE/VIEWERS/{endpoint}")
+    Call<PostResult> POST_BROADCAST_BY_VIEWERS(@FieldMap Map<String, String> parameters, @Path("endpoint") String endpoint);
+
+
+
 
 
     // GET LIVE BROADCAST WHOLE
     @GET("GETS/BROADCAST/LIVE/get.php")
     Call<List<LIVEINFO>> GET_LIST_LIVE_STREAM_CALL();
+
+    @GET("GETS/BROADCAST/LIVE/get.php")
+    Call<LIVEINFO> GET_LIVE_STREAM_INFO(@Query("primary_id") String user_primary_id);
 
 
 
@@ -127,6 +149,61 @@ public interface RequestApi {
     //GET USER INFO
     @GET("GETS/USER/get.php")
     Call<USERINFO> GET_USER_INFO(@Query("id") String id);
+
+
+
+
+
+
+
+    /**
+     *
+     * @param user_primary_id
+     * @return 객체
+     */
+    //GET SUBSCRIBE INFO(CHECK)
+    @GET("GETS/SUBSCRIBE/get.php")
+    Call<GET_REPO_CHECK> GET_SUBSCRIBE_CHECK_INFO(@Query("id") String user_primary_id,  @Query("streamerid") String user_streamer_primary_id);
+
+    /**
+     *
+     * @param user_primary_id
+     * @return 배열
+     */
+    //GET SUBSCRIBE INFO(배열)
+    @GET("GETS/SUBSCRIBE/get.php")
+    Call<List<SUBCRIBE>> GET_SUBSCRIBE_INFO(@Query("id") String user_primary_id);
+
+    /**
+     *
+     * @param endpoint 추가 / 수정 / 삭제
+     * @param parameters
+     * @return
+     */
+    //POST SUBCRIBE INFO(배열)
+    @FormUrlEncoded
+    @POST("POSTS/SUBCRIBE/{endpoint}")
+    Call<List<SUBCRIBE>> POST_SUBSCRIBE(
+            @Path("endpoint") String endpoint,
+            @FieldMap Map<String, String> parameters
+    );
+
+
+
+    //POST SUBCRIBE INFO CHECK( 확인 )
+    /**
+     *
+     * @param endpoint 추가 / 수정 / 삭제
+     * @return
+     *
+     */
+    @FormUrlEncoded
+    @POST("POSTS/SUBSCRIBE/{endpoint}")
+    Call<PostResult> POST_RESULT_CALL(
+            @Path("endpoint") String endpoint,
+            @FieldMap Map<String, String> parameters
+    );
+
 
 
 

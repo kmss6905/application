@@ -7,6 +7,15 @@ public class ItemLiveData {
     String live_stream_streamer_nick;
     String live_stream_viewer;
     String live_stream_tag;
+    String live_stream_user_pri_id;
+
+    public String getLive_stream_user_pri_id() {
+        return live_stream_user_pri_id;
+    }
+
+    public void setLive_stream_user_pri_id(String live_stream_user_pri_id) {
+        this.live_stream_user_pri_id = live_stream_user_pri_id;
+    }
 
     public String getLive_stream_route_stream() {
         return live_stream_route_stream;

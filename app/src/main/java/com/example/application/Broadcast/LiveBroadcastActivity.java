@@ -262,7 +262,7 @@ public class LiveBroadcastActivity extends AppCompatActivity implements WOWZStat
         goCoderBroadcastConfig.setHostAddress("13.209.208.103");
         goCoderBroadcastConfig.setPortNumber(1935);
         goCoderBroadcastConfig.setApplicationName("live");
-        goCoderBroadcastConfig.setStreamName(new UuidTest().getUnicVodString()); // 사용자가 수정한 타이틀을 받아옵니다. 문제가 있다. 한글로 타이틀을 정할 경우 나중에 동영상 녹화시에 해당 타이틀.mp4 에서 한글의 경우 깨진다. 따라서 vor가 저장된 경로를 찾을 수 없게 된다
+        goCoderBroadcastConfig.setStreamName(routeStream); // 사용자가 수정한 타이틀을 받아옵니다. 문제가 있다. 한글로 타이틀을 정할 경우 나중에 동영상 녹화시에 해당 타이틀.mp4 에서 한글의 경우 깨진다. 따라서 vor가 저장된 경로를 찾을 수 없게 된다
 
         goCoderBroadcastConfig.setAudioEnabled(true);
         goCoderBroadcastConfig.setVideoEnabled(true);

@@ -9,4 +9,5 @@
     <color name="holo_blue_light">@android:color/holo_blue_light</color>
     <color name="blue">#0000FF</color>
     <color name="mediumblue">#0000CD</color>
+    <color name="red">#FF0000</color>
 </resources>

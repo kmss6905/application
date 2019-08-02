@@ -262,9 +262,9 @@ public class HomeActivitiy extends AppCompatActivity {
 
 
 
+
+
     // ===========================================================툴바 메뉴==============================================================
-
-
     // Toolbar에 menu_home_toolbar.xml 을 인플레이트 함
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -298,6 +298,7 @@ public class HomeActivitiy extends AppCompatActivity {
     public void GET_USER_INFO(){
         Log.i(TAG, "GET_USER_INFO ");
 
+
         Call<USERINFO> GET_USER_INFO_CALL = requestApi.GET_USER_INFO(sharedPreferences.getString("id", ""));
 
         GET_USER_INFO_CALL.enqueue(new Callback<USERINFO>() {
@@ -308,6 +309,7 @@ public class HomeActivitiy extends AppCompatActivity {
                     Log.i(TAG, "onResponse / code ; " + response.code());
                     return;
                 }
+
 
                 USERINFO userinfo = response.body();
                 nickname = userinfo.getNick_name();

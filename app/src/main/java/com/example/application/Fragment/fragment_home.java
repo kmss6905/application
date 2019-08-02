@@ -1,11 +1,17 @@
 package com.example.application.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.util.LogTime;
 import com.example.application.Adapter.AdapterLIVEitem;
 import com.example.application.Adapter.AdapterVODitemMini;
+import com.example.application.Broadcast.ViewerLiveBroadcastActivity;
 import com.example.application.IPclass;
 import com.example.application.ItemData.ItemLiveData;
 import com.example.application.ItemData.ItemVodMiniData;
@@ -56,6 +63,10 @@ public class fragment_home extends Fragment {
     private RecyclerView recyclerView_hot_vod_list;
 
 
+    // 레이아웃 참조 변수
+
+    LinearLayout layout_hide_setting;
+
 
 
 
@@ -66,9 +77,10 @@ public class fragment_home extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.layout_fragment_home, container, false);
 
-
         // 데이터 리스트
         itemLiveDataArrayList = new ArrayList<>();
+
+
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://" + IPclass.IP_ADDRESS + "/")
@@ -98,8 +110,53 @@ public class fragment_home extends Fragment {
         Log.e(TAG, "onCreateView: HomeFragment");
 
 
+
+        adapterLIVEitem.setItemClick(new AdapterLIVEitem.ItemClick() {
+            @Override
+            public void onClick(View view, final int position, int type) {
+                switch (type){
+                    case 1: // 방송보기
+                        itemLiveDataArrayList.get(position).getLive_stream_user_pri_id(); // 스트리머의 user_pri_key 를 넘긴다.
+                        Intent intent = new Intent(getActivity(), ViewerLiveBroadcastActivity.class);
+                        intent.putExtra("STRAMER_PRIMARY_ID", itemLiveDataArrayList.get(position).getLive_stream_user_pri_id());
+                        intent.putExtra("ROUTE_STREAM", itemLiveDataArrayList.get(position).getLive_stream_route_stream());
+                        startActivity(intent);
+
+
+                        break;
+                    case 2: // 메뉴 클릭
+                        PopupMenu popupMenu = new PopupMenu(getActivity(), view);
+                        getActivity().getMenuInflater().inflate(R.menu.menu_broadcast, popupMenu.getMenu());
+
+                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem menuItem) {
+                                switch (menuItem.getItemId()){
+                                    case R.id.menu_visit:
+                                        Toast.makeText(getActivity(), "메뉴클릭 포지션: " + position + " / 방송국가기", Toast.LENGTH_SHORT).show();
+
+
+                                        break;
+                                    case R.id.menu_subscribe:
+                                        Toast.makeText(getActivity(), "메뉴클릭 포지션: " + position + " / 구독하기", Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
+                                return false;
+                            }
+                        });
+                        popupMenu.show();
+
+
+                        break;
+                }
+            }
+        });
+
+
         return rootView;
     }
+
+
 
 
 
@@ -148,9 +205,13 @@ public class fragment_home extends Fragment {
                     Log.i(TAG, "onResponse: liveinfo.getLive_stream_tag(): " + liveinfo.getLive_stream_tag());
                     itemLiveData.setLive_stream_streamer_nick(liveinfo.getNick_name());
                     Log.i(TAG, "onResponse: liveinfo.getNick_name() : " + liveinfo.getNick_name());
+                    itemLiveData.setLive_stream_route_stream(liveinfo.getLive_stream_route_stream());
+                    Log.i(TAG, "onResponse: liveinfo.getLive_stream_user_pri_id() : " + liveinfo.getLive_stream_user_pri_id());
+                    itemLiveData.setLive_stream_user_pri_id(liveinfo.getLive_stream_user_pri_id());
+                    itemLiveData.setLive_stream_viewer(liveinfo.getLive_stream_viewers());
+
 
                     itemLiveDataArrayList.add(itemLiveData);
-
                 }
 
                 adapterLIVEitem.notifyDataSetChanged();

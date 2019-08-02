@@ -7,6 +7,15 @@ public class LIVEINFO {
     String live_stream_tag;
     String live_stream_route_stream;
     String live_stream_user_pri_id;
+    String live_stream_viewers;
+
+    public String getLive_stream_viewers() {
+        return live_stream_viewers;
+    }
+
+    public void setLive_stream_viewers(String live_stream_viewers) {
+        this.live_stream_viewers = live_stream_viewers;
+    }
 
     public String getNick_name() {
         return nick_name;
