@@ -39,14 +39,13 @@
                 android:layout_height="wrap_content" />
 
             <!-- 프로필 이미지 -->
-            <de.hdodenhof.circleimageview.CircleImageView
+            <ImageView
                 android:id="@+id/account_profile_img"
                 android:layout_width="96dp"
                 android:layout_height="96dp"
                 android:layout_gravity="center"
-                android:src="@drawable/img"
-                app:civ_border_color="#FF000000"
-                app:civ_border_width="2dp"/>
+                android:src="@drawable/img" />
+
 
 
             <!-- 프로필 이미지 변경 버튼 -->

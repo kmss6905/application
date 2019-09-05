@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Broadcast.ViewerLiveBroadcastActivity"
     android:weightSum="11"
     android:orientation="vertical"
@@ -93,7 +94,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="horizontal"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_weight="2"
         >
 
@@ -103,7 +104,7 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -122,12 +123,19 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <ImageView
+
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imageView_profile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@android:drawable/picture_frame" />
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/img"
+                    app:civ_border_color="#FF000000"
+                    app:civ_border_width="2dp" />
+
+                <TextView
+                    android:layout_width="14dp"
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/textView_bj_nick"
@@ -169,29 +177,31 @@
                     android:backgroundTint="@android:color/transparent"
                     android:src="@drawable/star_check_24" />
 
-                <!--<ImageButton-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:src="@drawable/star_uncheck_24"-->
-                <!--android:visibility="gone"/>-->
+                <ImageButton
+                    android:id="@+id/btn_unsubscribe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/star_uncheck_24"
+                    android:visibility="gone"
+                    />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:text="여행태그  "
                     android:textColor="@android:color/white" />
 
                 <TextView
                     android:id="@+id/textView_streamers_tag"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:text=" #일본 #먹방 #당일치기"
                     android:textColor="@android:color/holo_blue_light" />
 
@@ -228,8 +238,7 @@
                 android:id="@+id/recyclerView_chat_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
-            </androidx.recyclerview.widget.RecyclerView>
+                android:layout_weight="1"></androidx.recyclerview.widget.RecyclerView>
 
 
             <TextView
@@ -246,7 +255,7 @@
                 android:paddingTop="2dp"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"
-                android:visibility="visible"/>
+                android:visibility="gone"/>
 
 
         </RelativeLayout>

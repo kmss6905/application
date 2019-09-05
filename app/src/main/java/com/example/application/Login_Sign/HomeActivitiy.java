@@ -19,10 +19,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.application.Account.ManageAccountActivity;
 import com.example.application.Broadcast.LiveBroadcastActivity;
 import com.example.application.Broadcast.ManageMyBroadcastActivity;
@@ -35,6 +38,7 @@ import com.example.application.Logg;
 import com.example.application.R;
 import com.example.application.Retrofit2.Repo.GETS.USERS.USERINFO;
 import com.example.application.Retrofit2.RequestApi;
+import com.example.application.SNS.SNSPostActicity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -73,7 +77,7 @@ public class HomeActivitiy extends AppCompatActivity {
 
     // DrawerLayout 에 있는 헤더 참조
     // 프로필이미지, 닉네임, 이메일, 개인 정보 상세보기 버튼
-    CircleImageView imageView_profile;
+    ImageView nav_header_imageview;
     TextView nav_header_email;
     TextView nav_header_nick_name;
     ImageButton nav_header_info_account;
@@ -92,7 +96,7 @@ public class HomeActivitiy extends AppCompatActivity {
     //framlayout 에 각각의 프레그먼트를 넣는다.
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private fragment_home  fragment_home = new fragment_home();
-    private fragment_map fragment_map = new fragment_map();
+    private fragment_map fragment_sns = new fragment_map();
     private fragment_account fragment_account = new fragment_account();
     private fragment_travel_info fragment_travel_info = new fragment_travel_info();
 
@@ -149,7 +153,7 @@ public class HomeActivitiy extends AppCompatActivity {
         nav_header_email = (TextView)nav_header_view.findViewById(R.id.textView_email);
         nav_header_nick_name = (TextView)nav_header_view.findViewById(R.id.textView_nickname);
         nav_header_info_account = (ImageButton)nav_header_view.findViewById(R.id.btn_info_account);
-
+        nav_header_imageview = nav_header_view.findViewById(R.id.imageView_profile);
 
         GET_USER_INFO();
 
@@ -170,16 +174,16 @@ public class HomeActivitiy extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()){
+                    case R.id.post: //게시글 추가 이동
+                    startActivity(new Intent(getApplicationContext(), SNSPostActicity.class));
+                    break;
+
                     case R.id.nav_live:
                         Log.i(TAG, "onNavigationItemSelected : nav_live " + nickname);
-                        Toast.makeText(getApplicationContext(), "라이브 방송 클릭", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(), "라이브 방송 클릭", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), LiveBroadcastActivity.class);
                         intent.putExtra("nickname", nickname);
-
                         startActivity(intent);
-                        break;
-                    case R.id.nav_vod:
-                        Toast.makeText(getApplicationContext(), "vod 방송 올리기", Toast.LENGTH_SHORT).show();
                         break;
 
                     case R.id.nav_my_broadcast_room:
@@ -221,8 +225,8 @@ public class HomeActivitiy extends AppCompatActivity {
                     case R.id.navigation_home:
                         transaction.replace(R.id.frame_layout, fragment_home).commitAllowingStateLoss();
                         break;
-                    case R.id.navigation_map:
-                        transaction.replace(R.id.frame_layout, fragment_map).commitAllowingStateLoss();
+                    case R.id.navigation_sns:
+                        transaction.replace(R.id.frame_layout, fragment_sns).commitAllowingStateLoss();
                         break;
                     case R.id.navigation_trip:
                         transaction.replace(R.id.frame_layout, fragment_travel_info).commitAllowingStateLoss();
@@ -241,28 +245,12 @@ public class HomeActivitiy extends AppCompatActivity {
 
     }
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        intent = getIntent();
-//        Logg.i("-------------------------TEST--------------------");
-//        id = intent.getStringExtra("id");
-//        Logg.i("------------------------TEST---------------------- id : " + id);
-//        String strUrl = "http://" + IPclass.IP_ADDRESS + "/main/main.php";
-//        RequsetAccount requsetAccount = new RequsetAccount();
-//        requsetAccount.execute(strUrl, id); //접속할 서버주소와 아이디를 key 값인 id를 넘긴다.
-//    }
 
-
-
-
-
-
-
-
-
-
-
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        GET_USER_INFO();
+    }
 
     // ===========================================================툴바 메뉴==============================================================
     // Toolbar에 menu_home_toolbar.xml 을 인플레이트 함
@@ -313,9 +301,12 @@ public class HomeActivitiy extends AppCompatActivity {
 
                 USERINFO userinfo = response.body();
                 nickname = userinfo.getNick_name();
+
+
                 Log.i(TAG, "userinfo.getNick_name() : " + nickname);
                 nav_header_nick_name.setText(nickname);
                 nav_header_email.setText(nickname);
+                Glide.with(getApplicationContext()).load(userinfo.getProfile_img()).apply(new RequestOptions().circleCrop()).into(nav_header_imageview);
 
             }
 
@@ -325,4 +316,10 @@ public class HomeActivitiy extends AppCompatActivity {
             }
         });
     }
+
+
+
+
+
+
 }

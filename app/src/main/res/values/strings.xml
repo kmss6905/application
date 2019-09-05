@@ -21,5 +21,8 @@
     <string name="ok">네</string>
     <string name="cencel">아니요</string>
 
+    <string name="sns_post_delete"><font fgcolor='#FF1400'>삭제</font></string>
+    <string name="sns_comment_delete"><font fgcolor='#FF1400'>삭제</font></string>
+
 
 </resources>

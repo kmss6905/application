@@ -5,6 +5,10 @@ import com.example.application.Retrofit2.Repo.Account;
 import com.example.application.Retrofit2.Repo.AddLiveStream;
 import com.example.application.Retrofit2.Repo.CheckNickResult;
 import com.example.application.Retrofit2.Repo.GETS.BROADCAST.LIVEINFO;
+import com.example.application.Retrofit2.Repo.GETS.BROADCAST.REAL_TIME_LOCATION;
+import com.example.application.Retrofit2.Repo.GETS.SNS.COMMENT.comment_list;
+import com.example.application.Retrofit2.Repo.GETS.SNS.Like;
+import com.example.application.Retrofit2.Repo.GETS.SNS.post;
 import com.example.application.Retrofit2.Repo.GETS.SUBSCRIBE.GET_REPO_CHECK;
 import com.example.application.Retrofit2.Repo.GETS.SUBSCRIBE.SUBCRIBE;
 import com.example.application.Retrofit2.Repo.GETS.USERS.USERINFO;
@@ -12,16 +16,23 @@ import com.example.application.Retrofit2.Repo.LivestreamInfo;
 import com.example.application.Retrofit2.Repo.Password;
 import com.example.application.Retrofit2.Repo.PostResult;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
@@ -74,6 +85,23 @@ public interface RequestApi {
      */
     @GET("get_live_info.php")
     Call<List<LivestreamInfo>> LIVE_STREAM_CALL();
+
+
+
+
+
+    // POST USER IMG
+    // 파일전송
+    @Multipart
+    @POST("POSTS/USER/update.php")
+    Call<PostResult> POST_UPLOAD_IMG_CALL(
+            @Part MultipartBody.Part File,
+            @Part("id") RequestBody id
+    );
+
+
+
+
 
 
 
@@ -140,8 +168,10 @@ public interface RequestApi {
     @GET("GETS/BROADCAST/LIVE/get.php")
     Call<List<LIVEINFO>> GET_LIST_LIVE_STREAM_CALL();
 
+
+    // GET LIVE BROADCAST ONE
     @GET("GETS/BROADCAST/LIVE/get.php")
-    Call<LIVEINFO> GET_LIVE_STREAM_INFO(@Query("primary_id") String user_primary_id);
+    Call<LIVEINFO> GET_LIVE_STREAM_INFO(@Query("streamerid") String streamer_primary_id);
 
 
 
@@ -206,14 +236,169 @@ public interface RequestApi {
 
 
 
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //                                                                          POST 여행 정보
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+    // POST 여행 정보
+    /**
+     *
+     * @param File 이미지
+     * @param stringRequestBodyMap  제목, 태그 , 위도 , 경도, 방송 시각, 루트 스트림, 유저 아이디
+     * @return
+     */
+    @Multipart
+    @POST("POSTS/TRIPINFO/{endpoint}")
+    Call<PostResult> POST_TRIPINFO_RESULT_CALL(
+            @Path("endpoint") String endpoint,
+            @Part MultipartBody.Part File,
+            @PartMap Map<String, RequestBody> stringRequestBodyMap
+    );
+
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //                                                                          POST 실시간 위치 정보(방송 시)
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    @FormUrlEncoded
+    @POST("POSTS/BROADCAST/LIVE/{endpoint}")
+    Call<PostResult> POST_REAL_LOCATION_RESULT_CALL(
+            @Path("endpoint") String endpoint,
+            @FieldMap Map<String, String> parameters
+    );
+
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //                                                                          GET 실시간 위치 정보(방송 시) viewer
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    /**
+     * @param endpoint         realtime_location.php
+     * @param route_stream  broad_cast_time
+     * @return
+     */
+    @GET("GETS/BROADCAST/LIVE/{endpoint}")
+    Call<REAL_TIME_LOCATION> GET_REAL_LOCATION_RESULT_CALL(
+            @Path("endpoint") String endpoint,
+            @Query("route_stream") String route_stream
+    );
+
+
+
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //                                                                            POST SNS 게시물
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     *
+     * @param endpoint add.php, update.php, delete.php
+     * @param files
+     * @return
+     */
+    // 게시물 POST
+    @Multipart
+    @POST("POSTS/SNS/{endpoint}")
+    Call<PostResult> SNS_POST_RESULT_CALL(
+            @Path("endpoint") String endpoint,
+            @Part List<MultipartBody.Part> files,
+            @PartMap Map<String, RequestBody> stringRequestBodyMap
+    );
+
+    // 게시물 POST
+    @Multipart
+    @POST("POSTS/SNS/update.php")
+    Call<PostResult> SNS_POST_RESULT_CALL_NOT_PHOTO_CHANGE(
+            @PartMap Map<String, RequestBody> stringRequestBodyMap
+    );
+
+
+    // 게시물 삭제
+    @FormUrlEncoded
+    @POST("POSTS/SNS/delete.php")
+    Call<PostResult> SNS_POST_DELETE_RESULT_CALL(
+        @Field("post_id") String postId
+    );
+
+
+
+    // 게시물 가져오기
+
+    @GET("GETS/SNS/{endpoint}")
+    Call<List<post>> SNS_GET_POST_LIST(
+            @Path("endpoint") String endpoint
+    );
+
+    // 게시물 좋아요 추가하기
+    @FormUrlEncoded
+    @POST("POSTS/SNS/LIKE/{endpoint}")
+    Call<PostResult> SNS_POST_LIKE_ADD_RECULT_CALL(
+            @Path("endpoint") String endpoint,
+        @FieldMap Map<String, String> stringStringMap
+    );
+
+
+    // 게시물 좋아요 체크하기
+    @FormUrlEncoded
+    @POST("GETS/SNS/LIKE/islike.php")
+    Call<PostResult> SNS_POST_LIKE_CHECK(
+            @FieldMap Map<String, String> stringStringMap
+    );
+
+
+    // 게시물 좋아요 리스트 가져오기
+    @GET("GETS/SNS/LIKE/list.php")
+    Call<List<Like>> SNS_GET_LIKE_LIST_CALL(
+            @Query("post_num") int postNum,
+            @Query("page_num") int pageNum,
+            @Query("id") String id
+    );
+
+
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //                                                                            GET SNS COMMENT
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    // 해당 게시물의 댓글 리스트를 전부 가져옵니다.
+    @GET("GETS/SNS/COMMENT/comment_list.php")
+    Call<List<comment_list>> SNS_GET_COMMENT_LIST_CALL(
+            @QueryMap Map<String, String> stringStringMap
+    );
+
+
+
+
+
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //                                                                            POST SNS COMMENT
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+    /**
+     *
+     * @param endpoint add.php, update.php, delete.php
+     * @param stringStringMap
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("POSTS/SNS/COMMENT/{endpoint}")
+    Call<PostResult> SNS_POST_COMMENT(
+            @Path("endpoint") String endpoint,
+            @FieldMap Map<String, String> stringStringMap
+    );
+
+
+
+
+
+    // 댓글 수정
+
+    // 댓글 삭제
 
 
 
     // live 방송 수정
     // live 방송 종료(삭제)
-
 
 
 

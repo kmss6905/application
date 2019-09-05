@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+
+
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="15dp"
+            android:text="여행 정보 등록하기"
+            android:textColor="@android:color/white"
+            android:background="@android:color/holo_blue_light"
+            android:textStyle="bold"
+            android:fontFamily="@font/noto_sans_kr_bold"/>
+
+
+    <!-- 여러가지 검색 버튼 -->
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/noto_sans_kr_bold"
+                        android:gravity="center"
+                        android:text="등록될 사진입니다" />
+
+                </LinearLayout>
+
+                <!-- 장소 제목 입력 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:elevation="5dp"
+                    app:cardCornerRadius="4dp">
+
+                    <ImageView
+                        android:id="@+id/post_captureimg_trip_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/noimg" />
+
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+
+                    <!--&lt;!&ndash; 숙박 &ndash;&gt;-->
+                    <!--<LinearLayout-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:layout_weight="1">-->
+
+                    <!--<ImageButton-->
+                    <!--android:id="@+id/hotel"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:src="@mipmap/outline_hotel_black_36"-->
+                    <!--android:backgroundTint="@android:color/transparent"/>-->
+
+                    <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="숙박"/>-->
+
+                    <!--</LinearLayout>-->
+
+
+                    <!--&lt;!&ndash;카페 &ndash;&gt;-->
+                    <!--<LinearLayout-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:layout_weight="1">-->
+
+                    <!--<ImageButton-->
+                    <!--android:id="@+id/cafe"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:src="@mipmap/outline_local_cafe_black_36"-->
+                    <!--android:backgroundTint="@android:color/transparent"/>-->
+
+                    <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="카페"/>-->
+
+                    <!--</LinearLayout>-->
+
+
+                    <!--&lt;!&ndash; 편의점 &ndash;&gt;-->
+                    <!--<LinearLayout-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:layout_weight="1">-->
+
+                    <!--<ImageButton-->
+                    <!--android:id="@+id/convenience_store"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:src="@mipmap/outline_local_convenience_store_black_36"-->
+                    <!--android:backgroundTint="@android:color/transparent"/>-->
+
+                    <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="편의점"-->
+                    <!--android:gravity="center"/>-->
+
+                    <!--</LinearLayout>-->
+
+                    <!--&lt;!&ndash;ATM기 &ndash;&gt;-->
+
+                    <!--<LinearLayout-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:layout_weight="1">-->
+
+                    <!--<ImageButton-->
+                    <!--android:id="@+id/atm"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:src="@mipmap/outline_atm_black_36"-->
+                    <!--android:backgroundTint="@android:color/transparent"/>-->
+
+                    <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="ATM기"-->
+                    <!--android:gravity="center"/>-->
+
+                    <!--</LinearLayout>-->
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="제목 : "/>
+
+                    <EditText
+                        android:id="@+id/post_title_trip_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="장소의 제목을 입력하세요"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+
+                <!-- 장소 태그 입력 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="태그 : "/>
+
+                    <EditText
+                        android:id="@+id/post_tag_trip_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="장소의 태그을 입력하세요"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <!-- 장소 주소 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="주소 : "/>
+
+                    <EditText
+                        android:id="@+id/post_address_trip_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="주소를 입력하세요"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <!-- 방송 경과 시각 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="여행정보 저장 시각 : "/>
+
+                        <ImageButton
+                            android:id="@+id/renew_broadcast_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:src="@mipmap/baseline_autorenew_black_24"
+                            android:backgroundTint="@android:color/transparent"
+                            android:visibility="gone"/>
+
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/post_broadcast_time_trip_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@android:color/holo_red_dark"/>
+
+
+                    <TextView
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="지도 정보"/>
+
+                </LinearLayout>
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="10dp">
+
+                    <fragment
+                        android:id="@+id/autocomplete_fragment"
+                        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </androidx.cardview.widget.CardView>
+
+
+
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <fragment
+                        android:id="@+id/post_map_trip_info"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" />
+
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/imgbtn_my_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/baseline_my_location_black_18"
+                        android:layout_gravity="right"
+                        android:backgroundTint="@android:color/transparent"/>
+
+
+                </FrameLayout>
+
+                <!-- 음식점 -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+
+                    <ImageButton
+                        android:id="@+id/food"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/outline_restaurant_black_24"
+                        android:backgroundTint="@android:color/transparent"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="음식점"/>
+
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+
+
+
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+
+
+
+    <!-- 취소 확인버튼 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/post_cancle_tripinfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="취소"/>
+
+
+        <Button
+            android:id="@+id/post_ok_tripinfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="저장"/>
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+</LinearLayout>

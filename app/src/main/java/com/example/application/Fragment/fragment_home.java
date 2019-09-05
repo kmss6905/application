@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.util.LogTime;
 import com.example.application.Adapter.AdapterLIVEitem;
@@ -31,6 +32,7 @@ import com.example.application.R;
 import com.example.application.Retrofit2.Repo.GETS.BROADCAST.LIVEINFO;
 import com.example.application.Retrofit2.Repo.LivestreamInfo;
 import com.example.application.Retrofit2.RequestApi;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -42,7 +44,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class fragment_home extends Fragment {
+public class fragment_home extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "fragment_home";
 
     // 레트로핏
@@ -68,6 +70,8 @@ public class fragment_home extends Fragment {
     LinearLayout layout_hide_setting;
 
 
+    // 새로고침
+    SwipeRefreshLayout swipeRefreshLayout;
 
 
 
@@ -82,7 +86,9 @@ public class fragment_home extends Fragment {
 
 
 
-        Retrofit retrofit = new Retrofit.Builder()
+
+
+                Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://" + IPclass.IP_ADDRESS + "/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -92,9 +98,16 @@ public class fragment_home extends Fragment {
         GET_LIVEINFO();
 
 
+        // 새로고침
+        swipeRefreshLayout = rootView.findViewById(R.id.swipeRefreshLo);
+        swipeRefreshLayout.setOnRefreshListener(this);
+
+
+
 
         recyclerView_hot_live_list = rootView.findViewById(R.id.recyclerView_hot_live_list);
         recyclerView_hot_live_list.setHasFixedSize(true); //??
+
 
 
 
@@ -172,7 +185,7 @@ public class fragment_home extends Fragment {
 
 
     // 라이브 리스트 가져오기
-    public void GET_LIVEINFO(){
+    public Boolean GET_LIVEINFO(){
 
         Log.i(TAG, "GET_LIVEINFO: 1");
         Call<List<LIVEINFO>> GET_LIVE_INFO_CALL = requestApi.GET_LIST_LIVE_STREAM_CALL();
@@ -196,22 +209,30 @@ public class fragment_home extends Fragment {
 
 
 
+
                 for(LIVEINFO liveinfo : liveinfos){
 
                     ItemLiveData itemLiveData = new ItemLiveData();
                     itemLiveData.setLive_stream_title(liveinfo.getLive_stream_title());
+                    System.out.println("확인 꺼내보자? 타이틀 : " + liveinfo.getLive_stream_title());
                     Log.i(TAG, "onResponse: liveinfo.getLive_stream_title() : " + liveinfo.getLive_stream_title());
                     itemLiveData.setLive_stream_tag(liveinfo.getLive_stream_tag());
+                    System.out.println("확인 꺼내보자? 태그 : " + liveinfo.getLive_stream_tag());
                     Log.i(TAG, "onResponse: liveinfo.getLive_stream_tag(): " + liveinfo.getLive_stream_tag());
                     itemLiveData.setLive_stream_streamer_nick(liveinfo.getNick_name());
+                    System.out.println("확인 꺼내보자? 이름 : " + liveinfo.getNick_name());
                     Log.i(TAG, "onResponse: liveinfo.getNick_name() : " + liveinfo.getNick_name());
                     itemLiveData.setLive_stream_route_stream(liveinfo.getLive_stream_route_stream());
+                    System.out.println("확인 꺼내보자? 루트스트림 : " + liveinfo.getLive_stream_route_stream());
                     Log.i(TAG, "onResponse: liveinfo.getLive_stream_user_pri_id() : " + liveinfo.getLive_stream_user_pri_id());
                     itemLiveData.setLive_stream_user_pri_id(liveinfo.getLive_stream_user_pri_id());
+                    System.out.println("확인 꺼내보자? 유닉아이디 : " + liveinfo.getLive_stream_user_pri_id());
                     itemLiveData.setLive_stream_viewer(liveinfo.getLive_stream_viewers());
+                    System.out.println("확인 꺼내보자? 뷰어 : " + liveinfo.getLive_stream_viewers());
 
 
                     itemLiveDataArrayList.add(itemLiveData);
+                    System.out.println("확인 사이즈" + itemLiveDataArrayList.size());
                 }
 
                 adapterLIVEitem.notifyDataSetChanged();
@@ -222,7 +243,16 @@ public class fragment_home extends Fragment {
                 Log.i(TAG, "onFailure: " + t.getMessage());
             }
         });
+
+        return false;
     }
 
+    @Override
+    public void onRefresh() {
+        itemLiveDataArrayList.clear(); // 모든데이터를 지운다
+        adapterLIVEitem.notifyDataSetChanged(); // 갱신한다.
 
+        GET_LIVEINFO();
+        swipeRefreshLayout.setRefreshing(false);
+    }
 }

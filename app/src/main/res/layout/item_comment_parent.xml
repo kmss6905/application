@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".item_comment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/item_comment_parent_profileImg"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_gravity="center"
+            android:src="@drawable/com_facebook_profile_picture_blank_portrait"
+            android:layout_margin="10dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <!-- 닉네임 , 내용 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/item_comment_parent_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    android:layout_marginRight="10dp"
+                    android:fontFamily="@font/noto_sans_kr_bold"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/item_comment_parent_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:layout_marginTop="10dp"/>
+
+
+            </LinearLayout>
+
+            <!-- 등록시간, 답글달기 버튼 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/item_comment_parent_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:layout_weight="1"
+                    android:text="1시간전"/>
+
+                <TextView
+                    android:id="@+id/item_comment_parent_re_comment_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="답글달기"/>
+
+            </LinearLayout>
+
+            </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/item_comment_parent_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="편집"
+            android:textSize="25dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:textColor="@android:color/holo_blue_light"/>
+
+        <TextView
+            android:id="@+id/item_comment_parent_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="삭제"
+            android:textSize="25dp"
+            android:layout_gravity="center"
+            android:textColor="@android:color/holo_red_dark"
+            android:layout_marginRight="10dp"/>
+
+        </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
+    <LinearLayout
+        android:id="@+id/item_comment_parent_show_more_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="65dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="--- 이전 답글 보기 "/>
+
+        <TextView
+            android:id="@+id/item_comment_rest_child_comment_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="( 5 )" />
+
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_comment_child"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="65dp"
+        android:layout_marginRight="10dp">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    </LinearLayout>

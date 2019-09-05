@@ -14,6 +14,9 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -43,6 +46,14 @@
         <item name="android:textColorSecondary">@android:color/white</item>
         <item name="actionMenuTextColor">@android:color/white</item>
     </style>
+
+
+    <style name="MyDialogTheme" parent="android:Theme.Dialog">
+        <item name="android:background">#ffdddddd</item>
+    </style>
+
+
+
 
 
 

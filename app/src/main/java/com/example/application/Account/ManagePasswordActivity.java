@@ -51,15 +51,15 @@ public class ManagePasswordActivity extends AppCompatActivity {
     EditText editText_current_pw;
     EditText editText_new_pw;
     EditText editText_new_againg_pw;
-    Button btn_change_password;
+        Button btn_change_password;
 
 
 
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_password);
 
 

@@ -20,6 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.application.IPclass;
 import com.example.application.Logg;
 import com.example.application.R;
@@ -53,6 +55,9 @@ public class ViewerLiveBroadcastActivity extends AppCompatActivity {
     Boolean islock = false;
 
 
+    Boolean isRunning = false;
+
+
 
     Intent intent; //primary key를 받는 녀석 그리고 routestream 을 받아와야 한다.
     String USERS_PRIMARY_ID;
@@ -78,7 +83,7 @@ public class ViewerLiveBroadcastActivity extends AppCompatActivity {
     TextView textView_viewers_num;
     TextView textView_streamers_tag;
     ImageView imageView_profile;
-
+    ImageButton btn_unsubscribe;
 
     //==========================================세팅 레이아웃=================================
     ImageButton btn_viewers_menu_miniwindow;
@@ -108,7 +113,28 @@ public class ViewerLiveBroadcastActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewer_live_broadcast);
 
-        //====================================================레이아웃 VIEW 참조==============================================
+
+        // ===================================== 시청자의 PRIKEY , 스트리머의 PRIKEY =================================================================================
+        sharedPreferences = getSharedPreferences("file", MODE_PRIVATE);
+        USERS_PRIMARY_ID = sharedPreferences.getString("id","");
+
+
+        intent = getIntent();
+        STRAMER_PRIMARY_ID = intent.getStringExtra("STRAMER_PRIMARY_ID"); // 스트리머 아이디
+        ROUTE_STREAM = intent.getStringExtra("ROUTE_STREAM"); // 루트 스트림(제목)
+
+
+        //==========================================레트로핏 구현====================================================================================================
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://" + IPclass.IP_ADDRESS + "/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        requestApi = retrofit.create(RequestApi.class);
+
+
+        //====================================================레이아웃 VIEW 참조==============================================\
+
         layout_livestream_info = findViewById(R.id.layout_livestream_info);
                 btn_subscribe = findViewById(R.id.btn_subscribe);
         textView_broadcast_title =findViewById(R.id.textView_broadcast_title);
@@ -128,7 +154,55 @@ public class ViewerLiveBroadcastActivity extends AppCompatActivity {
         layout_hide_setting = findViewById(R.id.layout_hide_setting);
         wowzPlayerView = findViewById(R.id.wowza_player_view); // wowza playerView
         layout_chatting = findViewById(R.id.layout_chatting); // chat 레이아웃
+        btn_unsubscribe = findViewById(R.id.btn_unsubscribe);
 
+
+        // 최초에 시작하면
+        GET_LIVEINFO_AND_GET_SUBSCRIBE(); // 서버로부터 해당 방송의 정보와 구독정보를 가져옵니다.
+        GET_SUBSCRIBE_CHECK(); // 해당 방송의 스트리머를 구독중인지 체크합니다.
+        POST_BROADCAST_VIEWERS_NUM("addnum.php");
+
+        //==========================================스트림 정보 레이아웃 기능===========================================
+        // 1. 구독 버튼 누르면 구독 or 구독 취소
+        btn_subscribe.setOnClickListener(new View.OnClickListener() { // 구독해제 버튼
+            @Override
+            public void onClick(View view) {
+
+                POST_SUBSCRIBE("delete.php");
+
+                btn_subscribe.setVisibility(View.GONE);
+                btn_unsubscribe.setVisibility(View.VISIBLE);
+
+                Toast.makeText(getApplicationContext(), "구독을 취소하였습니다.", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        btn_unsubscribe.setOnClickListener(new View.OnClickListener() { // 구독하기 버튼
+            @Override
+            public void onClick(View view) {
+
+                POST_SUBSCRIBE("update.php");
+
+                btn_subscribe.setVisibility(View.VISIBLE);
+                btn_unsubscribe.setVisibility(View.GONE);
+
+                Toast.makeText(getApplicationContext(), "구독 목록에 추가하였습니다", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+
+        // 스트리머 지도 보기 버튼
+        btn_viewers_menu_map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ViewerLiveStreamerMapLocationActivity.class);
+                intent.putExtra("route_stream", ROUTE_STREAM);
+                startActivity(intent);
+            }
+        });
 
 
 
@@ -158,6 +232,9 @@ public class ViewerLiveBroadcastActivity extends AppCompatActivity {
             public void onClick(View view) {
                 layout_hide_setting.setVisibility(View.VISIBLE);
                 layout_livestream_info.setVisibility(View.VISIBLE);
+
+                GET_LIVEINFO_AND_GET_SUBSCRIBE(); // 서버로부터 해당 방송의 정보와 구독정보를 가져옵니다.
+                GET_SUBSCRIBE_CHECK();
 
                 LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
@@ -239,22 +316,9 @@ public class ViewerLiveBroadcastActivity extends AppCompatActivity {
 
 
 
-        // ===================================== 시청자의 PRIKEY , 스트리머의 PRIKEY =================================================================================
-        sharedPreferences = getSharedPreferences("file", MODE_PRIVATE);
-        USERS_PRIMARY_ID = sharedPreferences.getString("id","");
 
 
-        intent = getIntent();
-        STRAMER_PRIMARY_ID = intent.getStringExtra("STRAMER_PRIMARY_ID"); // 스트리머 아이디
-        ROUTE_STREAM = intent.getStringExtra("ROUTE_STREAM"); // 루트 스트림(제목)
 
-        //==========================================레트로핏 구현====================================================================================================
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://" + IPclass.IP_ADDRESS + "/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        requestApi = retrofit.create(RequestApi.class);
 
 
 
@@ -275,6 +339,9 @@ public class ViewerLiveBroadcastActivity extends AppCompatActivity {
 
         WOWZStatusCallback statusCallback2 = new StatusCallback();
         wowzPlayerView.play(wowzPlayerConfig, statusCallback2);
+        Logg.i("============================================test=============================wowzPlayerView.getCurrentState()1 : " + wowzPlayerView.getCurrentState());
+        Logg.i("============================================test=============================wowzPlayerView.getCurrentState()2 : " + wowzPlayerView.getCurrentState());
+        Logg.i("============================================test=============================wowzPlayerView.getCurrentState() 3: " + wowzPlayerView.getCurrentState());
 
 
 //        if(wowzPlayerView.isPlaying()){ // 플레이어가 재생 중이라면
@@ -285,13 +352,14 @@ public class ViewerLiveBroadcastActivity extends AppCompatActivity {
 
 
 
+
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-
+        System.out.println("콜백 ?1 resume ? : isRunning" + isRunning);
     }
 
     @Override
@@ -325,12 +393,13 @@ public class ViewerLiveBroadcastActivity extends AppCompatActivity {
         @Override
         public void onWZStatus(WOWZStatus wzStatus) {
             Log.e(TAG, "onWZStatus: " + wzStatus.getState() );
-            System.out.println("wzStatus.getLastError();  " + wzStatus.getLastError());
-            System.out.println("wzStatus.getState(); : "  + wzStatus.getState());
-            Log.e(TAG, "wzStatus.getState():  1 wzStatus.isBuffering()" +  wzStatus.isBuffering());
-            System.out.println("wzStatus.getState(); 2   wowzPlayerView.getCurrentStatus() :"  + wowzPlayerView.getCurrentStatus().getState());
-            System.out.println("wzStatus.getState(); 3   wowzPlayerView.getCurrentStatus(): "  + wowzPlayerView.getCurrentStatus().isRunning());
-
+            System.out.println("콜백실행1");
+            if(wzStatus.isRunning()){
+                System.out.println("콜백실행2");
+                System.out.println("콜백실행2 : wzStatus.isRunning() : " + wzStatus.isRunning());
+                isRunning = true;
+                System.out.println("콜백실행2 : isRunning : " + isRunning);
+            }
         }
 
 
@@ -361,6 +430,9 @@ public class ViewerLiveBroadcastActivity extends AppCompatActivity {
 
     //=================================================================서버 통신===========================================================================
 
+
+
+
     public void GET_LIVEINFO_AND_GET_SUBSCRIBE(){
         Call<USERINFO> userinfoCall = requestApi.GET_USER_INFO(STRAMER_PRIMARY_ID);
         userinfoCall.enqueue(new Callback<USERINFO>() {
@@ -373,31 +445,51 @@ public class ViewerLiveBroadcastActivity extends AppCompatActivity {
 
                 USERINFO userinfo = response.body();
                 userinfo.getNick_name();
-                userinfo.getProfile_img();
+
+
+                textView_bj_nick.setText(userinfo.getNick_name()); // 닉네임
+                System.out.println("통신 가져와 ? userinfo.getNick_name() : " + userinfo.getNick_name());
+                Glide.with(getApplicationContext())
+                        .load(userinfo.getProfile_img())
+                        .apply(new RequestOptions()
+                                .circleCrop())
+                        .into(imageView_profile); // 이미지 넣음
+
+
+
+                System.out.println("통신 가져와 ? userinfo.getProfile_img(); : " + userinfo.getProfile_img());
+
 
 
 
 
                 Call<LIVEINFO> liveinfoCall = requestApi.GET_LIVE_STREAM_INFO(STRAMER_PRIMARY_ID);
+
                 liveinfoCall.enqueue(new Callback<LIVEINFO>() {
                     @Override
                     public void onResponse(Call<LIVEINFO> call, Response<LIVEINFO> response) {
                         if(!response.isSuccessful()){
                             Log.i(TAG, "onResponse: " + response.message());
+                            System.out.println("통신 가져와 ? liveinfo?? // repo.message" + response.message());
+                            System.out.println("통신 가져와 ? liveinfo?? // repo.code" + response.code());
                             return;
                         }
 
                         LIVEINFO liveinfo = response.body();
                         liveinfo.getLive_stream_like();
-                        liveinfo.getLive_stream_viewers();
-                        liveinfo.getLive_stream_title();
-                        liveinfo.getLive_stream_tag();
+
+                        textView_viewers_num.setText(liveinfo.getLive_stream_viewers());
+                        System.out.println("통신 가져와 ? liveinfo??" + liveinfo.getLive_stream_viewers());
+                        textView_broadcast_title.setText(liveinfo.getLive_stream_title());
+                        System.out.println("통신 가져와 ? liveinfo??" + liveinfo.getLive_stream_title());
+                        textView_streamers_tag.setText(liveinfo.getLive_stream_tag());
+                        System.out.println("통신 가져와 ? liveinfo??" + liveinfo.getLive_stream_tag());
                         liveinfo.getLive_stream_route_stream();
                     }
 
                     @Override
                     public void onFailure(Call<LIVEINFO> call, Throwable t) {
-
+                        System.out.println("통신 가져와 ? liveinfo?? FAIL??" + t.getMessage());
                     }
                 });
 
@@ -437,8 +529,12 @@ public class ViewerLiveBroadcastActivity extends AppCompatActivity {
 
                 if(get_repo_check.getResult().equals("success")){ //구독자일경우
                     //  구독 체크 별표표시
-                }else{
+                    btn_subscribe.setVisibility(View.VISIBLE);
+                    btn_unsubscribe.setVisibility(View.GONE);
+                }else if(get_repo_check.getResult().equals("fail")){
                     //  구독 체크 별표표시 하지 않음
+                    btn_subscribe.setVisibility(View.GONE);
+                    btn_unsubscribe.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -480,16 +576,18 @@ public class ViewerLiveBroadcastActivity extends AppCompatActivity {
                 if(!response.isSuccessful()){
                     Logg.i("========================================================test=================================");
                     Log.i(TAG, "onResponse " + response.message());
+                    Logg.i("========================================================test================================= response.code() : " + response.code());
+                    Logg.i("========================================================test================================= response.message() : " + response.message());
                     Logg.i("========================================================test=================================");
                     return;
                 }
 
                 PostResult postResult = response.body();
                 if(postResult.getResult().equals("success")){
-                    Toast.makeText(getApplicationContext(), "시청자수 반영", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "시청자수 반영", Toast.LENGTH_SHORT).show();
                     Logg.i("========================================================test=================================");
                 }else{
-                    Toast.makeText(getApplicationContext(), "시청자수 반영실패", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "시청자수 반영실패", Toast.LENGTH_SHORT).show();
                     Logg.i("========================================================test=================================");
                 }
             }
@@ -505,7 +603,7 @@ public class ViewerLiveBroadcastActivity extends AppCompatActivity {
 
     /**
      *
-     * @param endpoint  => add.php , update.php, delete.php
+     * @param endpoint  => update.php, delete.php
      */
     public void POST_SUBSCRIBE(String endpoint){
         Map<String, String> parameters = new HashMap<>();
@@ -520,6 +618,13 @@ public class ViewerLiveBroadcastActivity extends AppCompatActivity {
                 if(!response.isSuccessful()){
                     Log.i(TAG, "onResponse: " + response.message());
                     return;
+                }
+
+                PostResult postResult = response.body();
+                if(postResult.getResult().equals("success")){ //성공시 쿼리 성공
+                     System.out.println("통신 가져와 ? POST_SUBSCRIBE result : " + response.body());
+                }else{
+
                 }
             }
 

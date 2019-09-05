@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_sns_more_see_post"
+        android:title="게시물더보기"/>
+
+    <item android:id="@+id/menu_sns_see_broadcast"
+        android:title="방송국가기"/>
+
+    <item
+        android:id="@+id/menu_sns_subscribe"
+        android:title="구독하기"/>
+
+
+    <item android:id="@+id/menu_sns_edit"
+        android:title="수정" />
+
+    <item
+        android:id="@+id/menu_sns_delete"
+        android:title="@string/sns_post_delete"/>
+
+</menu>

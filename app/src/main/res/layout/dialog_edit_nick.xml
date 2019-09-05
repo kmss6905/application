@@ -32,7 +32,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="(영어 대소문자, 숫자,  하이픈('-'), 언더바('_') 을 포함한 3~16글자 이내)"
+            android:text="(영어 대소문자, 숫자,  하이픈('-') 또는 언더바('_') 사용한 3~16글자 이내)"
             android:fontFamily="@font/noto_sans_kr_bold"
             android:textColor="@color/grayy"
             android:textSize="15dp"

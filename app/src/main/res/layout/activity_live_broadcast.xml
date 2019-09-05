@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Broadcast.LiveBroadcastActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:keepScreenOn="true">
 
 
 
@@ -79,7 +80,6 @@
 
 
 
-
         </LinearLayout>
 
         <Chronometer
@@ -96,10 +96,118 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/layout_broadcast_status_when_up"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+
+                <!-- 좋아요 수 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:gravity="center"
+                        android:paddingRight="10dp"
+                        android:text="좋아요 수"
+                        android:textColor="@android:color/white" />
+
+                    <TextView
+                        android:id="@+id/textView_like_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:text="0"
+                        android:textColor="@android:color/holo_red_dark" />
+
+                </LinearLayout>
+
+                <!-- 시청자 수 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:gravity="center"
+                        android:paddingRight="10dp"
+                        android:text="시청자 수"
+                        android:textColor="@android:color/white" />
+
+                    <TextView
+                        android:id="@+id/textView_viewers_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:text="0"
+                        android:textColor="@android:color/holo_red_dark" />
+
+                </LinearLayout>
+
+                <!-- 후원 현황 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:gravity="center"
+                        android:paddingRight="10dp"
+                        android:text="후원 받은 금액 "
+                        android:textColor="@android:color/white" />
+
+                    <TextView
+                        android:id="@+id/textView_donation_amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:text="0"
+                        android:textColor="@android:color/holo_red_dark" />
+
+                </LinearLayout>
+
+                <!-- 후원 현황 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:gravity="center"
+                        android:paddingRight="10dp"
+                        android:text="구독 시청자 수"
+                        android:textColor="@android:color/white" />
+
+                    <TextView
+                        android:id="@+id/textView_subscribe_viewer_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:text="0"
+                        android:textColor="@android:color/holo_red_dark" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -128,7 +236,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/outline_mic_white_24"
-                    android:backgroundTint="@android:color/transparent"/>
+                    android:backgroundTint="@android:color/transparent"
+                    android:visibility="gone"/>
 
                 <ImageButton
                     android:id="@+id/btn_mic_off"
@@ -154,6 +263,13 @@
                     android:backgroundTint="@android:color/transparent"/>
 
                 <ImageButton
+                    android:id="@+id/btn_show_trip_info_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/baseline_format_list_numbered_white_24"
+                    android:backgroundTint="@android:color/transparent"/>
+
+                <ImageButton
                     android:id="@+id/btn_add_tilter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -175,6 +291,8 @@
                     android:backgroundTint="@android:color/transparent"/>
 
             </LinearLayout>
+
+
 
         </LinearLayout>
 
@@ -202,6 +320,8 @@
                 android:layout_weight="1"
                 android:visibility="gone"/>
 
+
+
             <ImageButton
                 android:id="@+id/btn_hide_chatlist"
                 android:layout_width="match_parent"
@@ -209,6 +329,8 @@
                 android:layout_gravity="center"
                 android:src="@mipmap/baseline_keyboard_arrow_down_white_24"
                 android:background="@android:color/transparent" />
+
+
 
             <ImageButton
                 android:id="@+id/btn_show_chatlist"

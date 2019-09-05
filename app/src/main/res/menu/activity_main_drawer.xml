@@ -9,14 +9,16 @@
     <group android:checkableBehavior="single">
 
         <item
+            android:id="@+id/post"
+            android:icon="@mipmap/round_create_black_36"
+            android:title="게시글 올리기"
+            />
+
+        <item
             android:id="@+id/nav_live"
             android:icon="@mipmap/baseline_videocam_black_36"
             android:title="LIVE 방송하기"/>
 
-        <item
-            android:id="@+id/nav_vod"
-            android:icon="@mipmap/baseline_live_tv_black_36"
-            android:title="VOD 방송올리기"/>
 
         <item
             android:id="@+id/nav_my_broadcast_room"
