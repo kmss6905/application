@@ -9,6 +9,7 @@ import com.example.application.Retrofit2.Repo.GETS.BROADCAST.REAL_TIME_LOCATION;
 import com.example.application.Retrofit2.Repo.GETS.SNS.COMMENT.comment_list;
 import com.example.application.Retrofit2.Repo.GETS.SNS.Like;
 import com.example.application.Retrofit2.Repo.GETS.SNS.post;
+import com.example.application.Retrofit2.Repo.GETS.SUBSCRIBE.Following;
 import com.example.application.Retrofit2.Repo.GETS.SUBSCRIBE.GET_REPO_CHECK;
 import com.example.application.Retrofit2.Repo.GETS.SUBSCRIBE.SUBCRIBE;
 import com.example.application.Retrofit2.Repo.GETS.USERS.USERINFO;
@@ -184,8 +185,6 @@ public interface RequestApi {
 
 
 
-
-
     /**
      *
      * @param user_primary_id
@@ -327,6 +326,16 @@ public interface RequestApi {
             @Path("endpoint") String endpoint
     );
 
+    // 특정 유저의 게시글 리스트를 가져옵니다.
+    @GET("GETS/SNS/{endpoint}")
+    Call<List<post>> SNS_GET_POST_LIST_AC(
+            @Path("endpoint") String endpoint,
+            @Query("user_id") String id,
+            @Query("photos") String is_photo_frg,
+            @Query("page_num") int page_num
+    );
+
+
     // 게시물 좋아요 추가하기
     @FormUrlEncoded
     @POST("POSTS/SNS/LIKE/{endpoint}")
@@ -363,6 +372,14 @@ public interface RequestApi {
             @QueryMap Map<String, String> stringStringMap
     );
 
+    //해당 게시물의 댓글 개수를 가져옵니다.
+    @FormUrlEncoded
+    @POST("GETS/SNS/COMMENT/comment_num.php")
+    Call<PostResult>SNS_GET_COMMENT_NUM_CALL(
+            @Field("post_num") String post_num
+    );
+
+
 
 
 
@@ -387,6 +404,42 @@ public interface RequestApi {
             @FieldMap Map<String, String> stringStringMap
     );
 
+
+
+
+
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //                                                                            GET NUM
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    @GET("GETS/NUM/{endpoint}")
+    Call<PostResult> GET_NUM(
+            @Path("endpoint") String endpoint,
+            @Query("user_id") String route_stream
+    );
+
+
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //                                                                        팔로잉 리스트 가져오기
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    // 팔로잉 여부 체크
+
+
+    @GET("GETS/SUBSCRIBE/{endpoint}")
+    Call<PostResult> GET_CHAECK_FOLLOWING(
+            @Path("endpoint") String endpoint,
+            @Query("user_id") String user_id,
+            @Query("id") String id
+    );
+
+    @GET("GETS/SUBSCRIBE/{endpoint}")
+    Call<List<Following>> GET_FOLLOWINF_OR_FOLLOWER_LIST(
+            @Path("endpoint") String endpoint,
+            @Query("user_id") String user_id,
+            @Query("id") String id,
+            @Query("page_num") int page_num
+    );
 
 
 

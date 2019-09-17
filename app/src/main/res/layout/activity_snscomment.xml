@@ -48,7 +48,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:background="@drawable/border_bottom">
+                android:background="@drawable/border_bottom"
+                android:visibility="gone">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/post_profile_img"
@@ -104,97 +105,146 @@
     </ScrollView>
 
 
-
-        <!-- 채팅 리스트가 들어가는 리사이클러뷰 -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView_comment_list"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:scrollbars="vertical"
-            android:layout_weight="1">
-
-
-        </androidx.recyclerview.widget.RecyclerView>
-
-
-
-
-        <!-- 하단 채팅창 입력하는 부분 -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            app:cardElevation="10dp">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/post_comment_profile_img"
-                    android:layout_width="46dp"
-                    android:layout_height="46dp"
+
+                <!-- 채팅 리스트가 들어가는 리사이클러뷰 -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView_comment_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/com_facebook_profile_picture_blank_portrait" />
+                    android:layout_weight="1"
+                    android:scrollbars="vertical">
+
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+
+
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/edit_text_border_black"
-                    android:orientation="horizontal">
+                    android:id="@+id/recomment_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal"
+                    android:background="@color/grayy"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:visibility="gone">
 
-                    <EditText
-                        android:id="@+id/comment_txt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@android:color/transparent"
-                        android:hint="댓글을 달아주세요"/>
-
-                    <Button
-                        android:id="@+id/comment_txt_ok"
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/button_select"
-                        android:text="등록"
-                        android:textColor="@color/white"
-                        android:textStyle="bold" />
+                        android:layout_weight="1"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center"
+                        android:layout_weight="6">
+
+                        <TextView
+                            android:id="@+id/text_recomment_target"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="kmss6905"
+                            android:fontFamily="@font/noto_sans_kr_bold"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text=" 님 에게 답글을 남기는 중입니다"
+                            android:fontFamily="@font/noto_sans_kr_bold"/>
+
+                    </LinearLayout>
+
+
+
+                    <ImageButton
+                        android:id="@+id/cancel_recomment_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@mipmap/outline_cancel_black_24"
+                        android:background="@android:color/transparent"
+                        android:layout_weight="1"/>
 
                 </LinearLayout>
 
 
-                <!--<RelativeLayout-->
-                <!--android:id="@+id/REFReLayTellFriend"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:orientation="horizontal">-->
+                <!-- 하단 채팅창 입력하는 부분 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    app:cardElevation="10dp">
 
-                <!--<EditText-->
-                <!--android:id="@+id/txt_comment"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:gravity="start"-->
-                <!--android:singleLine="true"-->
-                <!--android:background="@drawable/edit_text_border_black"/>-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:orientation="horizontal"
+                        android:gravity="center">
 
-                <!--<Button-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignRight="@+id/txt_comment"-->
-                <!--android:text="게시"/>-->
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/post_comment_profile_img"
+                            android:layout_width="46dp"
+                            android:layout_height="46dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:src="@drawable/com_facebook_profile_picture_blank_portrait" />
 
-                <!--</RelativeLayout>-->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/edit_text_border_black"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/comment_txt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@android:color/transparent"
+                                android:hint="댓글을 달아주세요"/>
+
+                            <Button
+                                android:id="@+id/comment_txt_ok"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/button_select"
+                                android:text="등록"
+                                android:textColor="@color/white"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
 
 
             </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+
+
 
 
 

@@ -17,6 +17,6 @@ public class fragment_travel_info extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.layout_fragment_account, container, false);
+        return inflater.inflate(R.layout.layout_fragment_trip, container, false);
     }
 }

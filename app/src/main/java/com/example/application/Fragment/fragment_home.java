@@ -84,10 +84,6 @@ public class fragment_home extends Fragment implements SwipeRefreshLayout.OnRefr
         // 데이터 리스트
         itemLiveDataArrayList = new ArrayList<>();
 
-
-
-
-
                 Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://" + IPclass.IP_ADDRESS + "/")
                 .addConverterFactory(GsonConverterFactory.create())

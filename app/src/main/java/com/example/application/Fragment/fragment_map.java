@@ -8,14 +8,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -27,6 +31,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.application.Adapter.AdapterLIVEitem;
 import com.example.application.IPclass;
+import com.example.application.Logg;
+import com.example.application.Login_Sign.HomeActivitiy;
+import com.example.application.MainActivity;
 import com.example.application.R;
 import com.example.application.Retrofit2.Repo.GETS.SNS.post;
 import com.example.application.Retrofit2.Repo.GETS.USERS.USERINFO;
@@ -77,10 +84,24 @@ public class fragment_map extends Fragment implements SwipeRefreshLayout.OnRefre
     SwipeRefreshLayout swipeRefreshLayout;
 
 
+    public static fragment_map newInstance(){
+        return new fragment_map();
+    }
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true); // 메뉴
         ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.layout_fragment_map, container, false);
+
+
+        getActivity().findViewById(R.id.toolbar).setVisibility(View.GONE);
+
+        //뷰 세팅
+        ImageButton sns_search = rootView.findViewById(R.id.sns_search); // 검색하기
+
+
 
 
         sharedPreferences = this.getActivity().getSharedPreferences("file", Context.MODE_PRIVATE);
@@ -196,6 +217,17 @@ public class fragment_map extends Fragment implements SwipeRefreshLayout.OnRefre
 
                         break;
                     case 3: // 닉네임 버튼( 해당 유저 방송국 이동), 닉네임 버튼 하단, 프로필 이미지 버튼
+                        // 프래그 먼트 덮어씌움
+
+                                fragment_account fragment_account = new fragment_account();
+                                Bundle args = new Bundle();
+                                args.putString("user_id", postArrayList.get(position).getUser_unic_id()); // 인텐트로 고유의 아이디 값을 넘김니다.
+                                fragment_account.setArguments(args);
+                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, fragment_account).commitAllowingStateLoss();
+
+
+
+
                         break;
                     case 7: //
                         break;
@@ -312,6 +344,12 @@ public class fragment_map extends Fragment implements SwipeRefreshLayout.OnRefre
 
                 for(post post : snsPostLists){
 
+                    Log.d(TAG, "onResponse: (확인) post.toString() / " + post.toString());
+
+
+
+
+
                     // 좋아요 체크하기
                     HashMap<String, String> stringStringHashMap = new HashMap<>();
                     stringStringHashMap.put("post_id", post.getId());
@@ -339,9 +377,13 @@ public class fragment_map extends Fragment implements SwipeRefreshLayout.OnRefre
 
                             USERINFO userinfo = response.body();
                             System.out.println("실행6");
-                            snspost.setUser_id(userinfo.getNick_name());
+
+                            Log.d(TAG, "(확인) onResponse: userInfoCall /" + userinfo.toString());
+
+                            snspost.setUser_unic_id(post.getUser_id()); // 유저 고유 유닉 아이디
+                            snspost.setUser_id(userinfo.getNick_name()); // 닉네임
                             System.out.println("실행7");
-                            snspost.setProfileImgUrl(userinfo.getProfile_img());
+                            snspost.setProfileImgUrl(userinfo.getProfile_img()); // 프로필 이미지 경로
                             System.out.println("실행8");
                         }
 
@@ -357,7 +399,6 @@ public class fragment_map extends Fragment implements SwipeRefreshLayout.OnRefre
                     System.out.println("실행10");
                     Call<PostResult> postResultCall = requestApi.SNS_POST_LIKE_CHECK(stringStringHashMap);
                     System.out.println("실행11");
-
                     postResultCall.enqueue(new Callback<PostResult>() {
                         @Override
                         public void onResponse(Call<PostResult> call, Response<PostResult> response) {
@@ -381,8 +422,6 @@ public class fragment_map extends Fragment implements SwipeRefreshLayout.OnRefre
                                 System.out.println("실행17");
                                 System.out.println("result fail");
                             }
-
-
                         }
 
                         @Override
@@ -393,6 +432,7 @@ public class fragment_map extends Fragment implements SwipeRefreshLayout.OnRefre
                         }
                     });
                     System.out.println("실행18");
+
 
                     snspost.setIslike(false);
                     snspost.setId(post.getId());
@@ -405,6 +445,48 @@ public class fragment_map extends Fragment implements SwipeRefreshLayout.OnRefre
                     snspost.setTag(post.getTag());
 
 
+                    System.out.println("post.getId() : " + post.getId());
+
+
+
+                    // 서버로 부터 해당 게시물의 댓글 수를 가져옵니다.
+                    Call<PostResult> postResultCall1 = requestApi.SNS_GET_COMMENT_NUM_CALL(post.getId()); // 줄 떄 스트링임 받을 떄 int 로 바꾸어야함
+                    Logg.i("==============================================testt===========================================");
+
+                    postResultCall1.enqueue(new Callback<PostResult>() {
+                        @Override
+                        public void onResponse(Call<PostResult> call, Response<PostResult> response) {
+                            if(!response.isSuccessful()){
+                                Logg.i("==============================================testt===========================================");
+                                Log.d(TAG, "onResponse: " + response.message());
+                                Logg.i("==============================================testt===========================================");
+                                Log.d(TAG, "onResponse: " + response.raw());
+                                Logg.i("==============================================testt===========================================");
+                                return;
+                            }
+
+                            PostResult postResult = response.body();
+
+                            if (postResult != null) {
+                                Log.d(TAG, "(확인) onResponse: postResult.getResult() 댓글 수// " + postResult.getResult());
+                                snspost.setCommentNum(postResult.getResult());
+                            }
+
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<PostResult> call, Throwable t) {
+                            Logg.i("==============================================testt===========================================");
+                            Log.d(TAG, "onFailure: " + t.getMessage());
+                            Logg.i("==============================================testt===========================================");
+                        }
+                    });
+
+                    Logg.i("==============================================testt===========================================");
+
+
+
 
                     String[] str = post.getPhoto_list().split(",");
 
@@ -414,9 +496,14 @@ public class fragment_map extends Fragment implements SwipeRefreshLayout.OnRefre
                         photoStringArrayList.add(str[i]);
                         System.out.println("실행 str[" + i + "] :" + str[i]);
                     }
-                    snspost.setPhotoUriArrayList(photoStringArrayList);
+                    snspost.setPhotoUriArrayList(photoStringArrayList); //사진 이미지
+
+
+                    Log.d(TAG, "onResponse: snspost // " + snspost.toString() );
+
 
                     postArrayList.add(snspost);
+
                 }
 
 
@@ -579,6 +666,11 @@ public class fragment_map extends Fragment implements SwipeRefreshLayout.OnRefre
         });
     }
 
+    //게시물 댓글 수 가져오기
+    public void GET_SNS_COMMENT_NUM(){
+
+    }
+
 
     // 새로고침하기
     @Override
@@ -593,5 +685,9 @@ public class fragment_map extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
 
-
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_register, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 }

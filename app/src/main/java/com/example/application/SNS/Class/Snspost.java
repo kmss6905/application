@@ -6,12 +6,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Snspost implements Serializable {
-    String user_id;
+    String user_id; // 닉네임
     String profileImgUrl;
     ArrayList<String> photoUriArrayList;
-
     Boolean islike;
-    String id;
+    String id; // 포스트 아이디
     String likenum;
     String commentNum;
     String date;
@@ -20,6 +19,16 @@ public class Snspost implements Serializable {
     String lat;
     String lon;
     String tag;
+    String user_unic_id;
+
+    public String getUser_unic_id() {
+        return user_unic_id;
+    }
+
+    public void setUser_unic_id(String user_unic_id) {
+        this.user_unic_id = user_unic_id;
+    }
+
 
     @Override
     public String toString() {

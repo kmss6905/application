@@ -12,6 +12,22 @@ public class post {
     String like;
     String address;
 
+    @Override
+    public String toString() {
+        return "post{" +
+                "id='" + id + '\'' +
+                ", user_id='" + user_id + '\'' +
+                ", photo_list='" + photo_list + '\'' +
+                ", lon='" + lon + '\'' +
+                ", lat='" + lat + '\'' +
+                ", tag='" + tag + '\'' +
+                ", date='" + date + '\'' +
+                ", content='" + content + '\'' +
+                ", like='" + like + '\'' +
+                ", address='" + address + '\'' +
+                '}';
+    }
+
     public String getId() {
         return id;
     }
@@ -91,5 +107,7 @@ public class post {
     public void setAddress(String address) {
         this.address = address;
     }
+
+
 
 }

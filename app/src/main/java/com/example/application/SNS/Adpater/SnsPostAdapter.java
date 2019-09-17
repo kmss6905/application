@@ -94,6 +94,17 @@ public class SnsPostAdapter extends RecyclerView.Adapter<SnsPostAdapter.SnsPostV
         }
 
 
+        Log.d(TAG, "onBindViewHolder: snspostArrayList.get(" + position + ").getCommentNum() : "  + snspostArrayList.get(position).getCommentNum());
+
+
+        if(snspostArrayList.get(position).getCommentNum() == null || snspostArrayList.get(position).getCommentNum().equals("0")){
+            holder.postCommentMoreSeeBtn.setVisibility(View.GONE); // 개수가 0인경우에는 아예보여주지 않음
+            Log.d(TAG, "onBindViewHolder: " + "댓글 보여주지않음");
+        }else{
+            holder.postCommentMoreSeeBtn.setVisibility(View.VISIBLE);
+            holder.postCommentNumText.setText(snspostArrayList.get(position).getCommentNum()); // 댓글 수
+            Log.d(TAG, "onBindViewHolder: " + "댓글 보여줌");
+        }
 
 
 
@@ -101,7 +112,6 @@ public class SnsPostAdapter extends RecyclerView.Adapter<SnsPostAdapter.SnsPostV
         holder.nicknameText2.setText(snspostArrayList.get(position).getUser_id()); // 닉네임 2(하단)
         holder.locationText.setText(snspostArrayList.get(position).getAddress()); // 주소
         holder.likeNum.setText(snspostArrayList.get(position).getLikenum()); // 좋아요 수
-        holder.postCommentNumText.setText(snspostArrayList.get(position).getCommentNum()); // 댓글 수
         holder.postDateText.setText(snspostArrayList.get(position).getDate()); // 등록 일시
         holder.contentText.setText(snspostArrayList.get(position).getContent()); // 짧은 내용
         holder.moreContentText.setText(snspostArrayList.get(position).getContent()); // 긴 내용
@@ -314,6 +324,7 @@ public class SnsPostAdapter extends RecyclerView.Adapter<SnsPostAdapter.SnsPostV
         TextView tagText;
         CircleIndicator circleIndicator;
         LinearLayout moreLike;
+
 
 
         public SnsPostViewHolder(@NonNull View itemView) {

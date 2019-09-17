@@ -24,5 +24,10 @@
     <string name="sns_post_delete"><font fgcolor='#FF1400'>삭제</font></string>
     <string name="sns_comment_delete"><font fgcolor='#FF1400'>삭제</font></string>
 
+    <!-- 어카운트 -->
+
+    <string name="toolbar_following">팔로잉</string>
+    <string name="toolbar_follower">팔로워</string>
+
 
 </resources>

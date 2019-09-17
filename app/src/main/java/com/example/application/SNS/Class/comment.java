@@ -10,6 +10,20 @@ public class comment {
     String nickname;
     String postid;
 
+    @Override
+    public String toString() {
+        return "comment{" +
+                "comment_id='" + comment_id + '\'' +
+                ", user_id='" + user_id + '\'' +
+                ", content='" + content + '\'' +
+                ", date='" + date + '\'' +
+                ", profile='" + profile + '\'' +
+                ", parent_id='" + parent_id + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", postid='" + postid + '\'' +
+                '}';
+    }
+
     public String getPostid() {
         return postid;
     }
@@ -25,21 +39,6 @@ public class comment {
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
-
-    @Override
-    public String toString() {
-        return "comment{" +
-                "comment_id='" + comment_id + '\'' +
-                ", user_id='" + user_id + '\'' +
-                ", content='" + content + '\'' +
-                ", date='" + date + '\'' +
-                ", profile='" + profile + '\'' +
-                ", parent_id='" + parent_id + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", nickname='" + nickname + '\'' +
-                '}';
-    }
-
 
 
     public String getContent() {

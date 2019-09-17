@@ -9,18 +9,11 @@ public class parentComment {
     String date;
     String profile;
     String parent_id;
-
+    String post_id;
     String nickname;
     ArrayList<comment> childComments;
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
+    String is_delete;
+    String is_edit;
 
     @Override
     public String toString() {
@@ -31,9 +24,47 @@ public class parentComment {
                 ", date='" + date + '\'' +
                 ", profile='" + profile + '\'' +
                 ", parent_id='" + parent_id + '\'' +
+                ", post_id='" + post_id + '\'' +
+                ", nickname='" + nickname + '\'' +
                 ", childComments=" + childComments +
+                ", is_delete='" + is_delete + '\'' +
+                ", is_edit='" + is_edit + '\'' +
                 '}';
     }
+
+    public String getIs_edit() {
+        return is_edit;
+    }
+
+    public void setIs_edit(String is_edit) {
+        this.is_edit = is_edit;
+    }
+
+    public String getPost_id() {
+        return post_id;
+    }
+
+    public void setPost_id(String post_id) {
+        this.post_id = post_id;
+    }
+
+
+    public String getIs_delete() {
+        return is_delete;
+    }
+
+    public void setIs_delete(String is_delete) {
+        this.is_delete = is_delete;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
 
     public String getComment_id() {
         return comment_id;

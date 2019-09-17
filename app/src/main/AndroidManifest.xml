@@ -38,9 +38,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".item_comment"></activity>
+        <activity android:name=".SNS.SNSFollowListActivity"></activity>
+        <activity android:name=".SNS.SNSOnePostActivity" />
+        <activity android:name=".Main4Activity" />
+        <activity android:name=".item_comment" />
         <activity android:name=".SNS.SNSPostLocationActivity" />
-        <activity android:name=".SNS.SNSCommentActivity" />
+        <activity
+            android:name=".SNS.SNSCommentActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".SNS.SNSPostActicity" />
         <activity android:name=".SNS.LikeListActivity" />
         <activity

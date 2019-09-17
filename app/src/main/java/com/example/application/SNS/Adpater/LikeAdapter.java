@@ -2,6 +2,7 @@ package com.example.application.SNS.Adpater;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import java.util.zip.Inflater;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class LikeAdapter extends RecyclerView.Adapter<LikeAdapter.likeViewHolder> {
+    private static final String TAG = "LikeAdapter";
     SharedPreferences sharedPreferences;
 
 
@@ -70,6 +72,7 @@ public class LikeAdapter extends RecyclerView.Adapter<LikeAdapter.likeViewHolder
 
 
         if(likeListItemDataArrayList.get(position).getUnique_id().equals(id)){ // 만약 본인이 클릭한다면?
+            Log.d(TAG, "onBindViewHolder: " + likeListItemDataArrayList.get(position).toString());
             holder.followingBtn.setVisibility(View.GONE);
             holder.followBtn.setVisibility(View.GONE);
         }else{

@@ -11,6 +11,41 @@ public class comment_list {
     String profile_img;
     String nick_name;
     String user_id;
+    String is_delete;
+
+    public String getIs_delete() {
+        return is_delete;
+    }
+
+    public void setIs_delete(String is_delete) {
+        this.is_delete = is_delete;
+    }
+
+    public String getIs_edit() {
+        return is_edit;
+    }
+
+    public void setIs_edit(String is_edit) {
+        this.is_edit = is_edit;
+    }
+
+    @Override
+    public String toString() {
+        return "comment_list{" +
+                "date='" + date + '\'' +
+                ", content='" + content + '\'' +
+                ", sns_post_id='" + sns_post_id + '\'' +
+                ", parent_comment_id='" + parent_comment_id + '\'' +
+                ", id='" + id + '\'' +
+                ", profile_img='" + profile_img + '\'' +
+                ", nick_name='" + nick_name + '\'' +
+                ", user_id='" + user_id + '\'' +
+                ", is_edit='" + is_edit + '\'' +
+                ", comment_lists=" + comment_lists +
+                '}';
+    }
+
+    String is_edit;
     ArrayList<comment_list> comment_lists;
 
 
