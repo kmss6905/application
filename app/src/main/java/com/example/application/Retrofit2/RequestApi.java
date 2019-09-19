@@ -314,16 +314,33 @@ public interface RequestApi {
     @FormUrlEncoded
     @POST("POSTS/SNS/delete.php")
     Call<PostResult> SNS_POST_DELETE_RESULT_CALL(
-        @Field("post_id") String postId
+            @Field("post_id") String postId
     );
 
 
 
-    // 게시물 가져오기
-
+    // 게시물들 가져오기
     @GET("GETS/SNS/{endpoint}")
     Call<List<post>> SNS_GET_POST_LIST(
             @Path("endpoint") String endpoint
+    );
+
+    // 하나의 게시물만을 가져옵니다.
+
+    /**
+     *
+     * @param endpoint php파일
+     * @param post_id 게시물 번호
+     * @return
+     *
+     *  사용 되는 곳 -> 하나의 게시물에 대한 정보를 필요로 하는 곳
+     *      하나의 게시물에 대한 정보를 보여주는 곳은 어디든지 사용가능
+     *      현재 : 개인 SNS 계정 포토 리스트에 대한 포토 클릭 -> 게시물 상세히 볼 수 있음
+     */
+    @GET("GETS/SNS/{endpoint}")
+    Call<post> SNS_GET_ONE_POST(
+            @Path("endpoint") String endpoint,
+            @QueryMap Map<String, String> getSnsParmeter
     );
 
     // 특정 유저의 게시글 리스트를 가져옵니다.
@@ -341,7 +358,7 @@ public interface RequestApi {
     @POST("POSTS/SNS/LIKE/{endpoint}")
     Call<PostResult> SNS_POST_LIKE_ADD_RECULT_CALL(
             @Path("endpoint") String endpoint,
-        @FieldMap Map<String, String> stringStringMap
+            @FieldMap Map<String, String>GstringStringMap
     );
 
 
@@ -415,7 +432,7 @@ public interface RequestApi {
     @GET("GETS/NUM/{endpoint}")
     Call<PostResult> GET_NUM(
             @Path("endpoint") String endpoint,
-            @Query("user_id") String route_stream
+            @QueryMap Map<String, String> stringStringMap
     );
 
 

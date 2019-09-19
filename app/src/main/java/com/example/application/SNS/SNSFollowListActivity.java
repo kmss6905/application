@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -20,13 +22,17 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.application.IPclass;
 import com.example.application.R;
 import com.example.application.Retrofit2.Repo.GETS.SUBSCRIBE.Following;
+import com.example.application.Retrofit2.Repo.PostResult;
 import com.example.application.Retrofit2.RequestApi;
 import com.example.application.SNS.Adpater.LikeAdapter;
 import com.example.application.SNS.Class.likeListItemData;
+import com.facebook.appevents.codeless.CodelessLoggingEventListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -58,7 +64,7 @@ public class SNSFollowListActivity extends AppCompatActivity implements SwipeRef
 
 
 
-     // 리사이클러뷰
+    // 리사이클러뷰
     LikeAdapter followingAdpater; // 사실 좋아요 리스트에 쓰던건데 여기서 똑같이 적용되니까 쓰자
     ArrayList<likeListItemData> snsfollowArrayList;
     RecyclerView recyclerView;
@@ -138,7 +144,7 @@ public class SNSFollowListActivity extends AppCompatActivity implements SwipeRef
 
 
 
-         // 팔로워를 보고 싶은 경우
+            // 팔로워를 보고 싶은 경우
         }else if(tag.equals("follower")){
             // 하지만 다른 사람의 계정의 팔로잉 리스트를 보고 싶은건지?
             // 나의 계정의 팔로잉 리스트를 보고 싶은건지 확인
@@ -157,20 +163,61 @@ public class SNSFollowListActivity extends AppCompatActivity implements SwipeRef
 
 
 
-   }
+    }
 
 
+    // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //                                                                              서버 통신
+    // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    public void UPDATE_SUBSCRIBE(String endpoint, String subscribd_id, String id){
+        HashMap<String, String> stringStringHashMap = new HashMap<>();
+        stringStringHashMap.put("id", id);
+        stringStringHashMap.put("streamerid", subscribd_id);
+
+        Call<PostResult> postResultCall = requestApi.POST_RESULT_CALL(endpoint, stringStringHashMap);
+        postResultCall.enqueue(new Callback<PostResult>() {
+            @Override
+            public void onResponse(Call<PostResult> call, Response<PostResult> response) {
+                if(!response.isSuccessful()){
+                    Log.d(TAG, "onResponse: " + response.message());
+                    return;
+                }
+
+
+                PostResult postResult = response.body();
+                if(postResult.getResult().equals("success")){
+                    if(endpoint.equals("update.php")){
+//                        Toast.makeText(getApplicationContext(),"팔로잉 중입니다.", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(getWindow().getDecorView().getRootView(), "팔로잉 중입니다", Snackbar.LENGTH_SHORT).show();
+                    }else if(endpoint.equals("delete.php")){
+//                        Toast.makeText(getApplicationContext(),"팔로잉을 취소하였습니다.", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(getWindow().getDecorView().getRootView(), "팔로잉을 취소하였습니다.", Snackbar.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(getApplicationContext(),"서버통신 실패", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<PostResult> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+
+
+    }
     /**
      *
      * @param endpoint endpoint 의 경우 following.php 와 follower.php 가 있다.
      * @param user_id 사용자의 아이디를 보낸다.
      */
 
-   public void GET_FOLLOWING_LIST(String endpoint, String user_id, String id, int pageNum){
+    public void GET_FOLLOWING_LIST(String endpoint, String user_id, String id, int pageNum){
 
-       Log.d(TAG, "GET_FOLLOWING_LIST: " + 2);
+        Log.d(TAG, "GET_FOLLOWING_LIST: " + 2);
         Call<List<Following>> CallFollowingList = requestApi.GET_FOLLOWINF_OR_FOLLOWER_LIST(endpoint, user_id, id, pageNum);
-       Log.d(TAG, "GET_FOLLOWING_LIST: " + 3);
+        Log.d(TAG, "GET_FOLLOWING_LIST: " + 3);
         CallFollowingList.enqueue(new Callback<List<Following>>() {
             @Override
             public void onResponse(Call<List<Following>> call, Response<List<Following>> response) {
@@ -186,13 +233,19 @@ public class SNSFollowListActivity extends AppCompatActivity implements SwipeRef
                     // 하나의 팔로잉 유저 정보
                     likeListItemData likeListItemData = new likeListItemData();
 
+
+
                     likeListItemData.setUnique_id(following.getUser_id());
                     likeListItemData.setNickname(following.getNick_name()); // 팔로잉 유저의 닉네임
                     likeListItemData.setProfile(following.getProfile_img()); // 팔로잉 유저의 프로필 이미지 경로
                     likeListItemData.setIsFollowing(following.getFollowing()); // 팔로잉 유저의 필로잉 유무
 
+
                     // 팔로잉 유저정보를 해당 리스트에 추가한다.
                     snsfollowArrayList.add(likeListItemData);
+
+                    Log.d(TAG, "onResponse: " + likeListItemData.toString() + " // "+  following.getUser_id() + "// " + response.raw());
+                    Log.d(TAG, "onResponse: " + following.toString());
                 }
 
                 // 서버로 부터 데이터 모두를 받고
@@ -207,8 +260,8 @@ public class SNSFollowListActivity extends AppCompatActivity implements SwipeRef
                 Log.d(TAG, "onFailure: " + t.getMessage());
             }
         });
-   }
-   // 생명주기
+    }
+    // 생명주기
 
 
     @Override
@@ -239,22 +292,53 @@ public class SNSFollowListActivity extends AppCompatActivity implements SwipeRef
                 }
             }
         });
+
+        // 클릭
+        followingAdpater.setItemClick(new LikeAdapter.ItemClick() {
+            @Override
+            public void onClick(View view, int position, int id, LikeAdapter.likeViewHolder likeViewHolder) {
+                SharedPreferences sharedPreferences = getSharedPreferences("file", MODE_PRIVATE);
+                String Id = sharedPreferences.getString("id", "");
+
+
+                switch (id){
+                    case 1: // 닉네임 밑 프로필 클릭
+                        break;
+
+
+                    case 2: // 팔로우 하기 버튼 누르기
+                        UPDATE_SUBSCRIBE("update.php", snsfollowArrayList.get(position).getUnique_id(), Id);
+                        likeViewHolder.followingBtn.setVisibility(View.VISIBLE);
+                        likeViewHolder.followBtn.setVisibility(View.GONE);
+                        break;
+
+
+                    case 3: // 팔로잉된상태임 -> 팔로잉 취소 버튼 누르기
+                        UPDATE_SUBSCRIBE("delete.php", snsfollowArrayList.get(position).getUnique_id(), Id);
+                        likeViewHolder.followBtn.setVisibility(View.VISIBLE);
+                        likeViewHolder.followingBtn.setVisibility(View.GONE);
+                        break;
+                }
+            }
+        });
     }
+
+
 
     // 메뉴 세팅
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-       getMenuInflater().inflate(R.menu.menu_register, menu);
+        getMenuInflater().inflate(R.menu.menu_register, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-       switch (item.getItemId()){
-           case android.R.id.home:
-               finish();
-               break;
-       }
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                break;
+        }
 
         return super.onOptionsItemSelected(item);
     }

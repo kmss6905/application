@@ -127,6 +127,7 @@ public class fragment_account extends Fragment {
                 GET_USER_INFO(id); // 사용자 정보 가져오기
                 GET_FOLLOWING_NUM(id); // 팔로잉 수 가져오기
                 GET_SNS_POST_NUM(id); // SNS 게시물 수 가져오기
+                GET_FOLLOW_NUM(id, hasIntentId); // 팔로워 리스트 가져옴
                 // VOD 수 가져오기
                 // 팔로워 수 가져오기
 
@@ -139,6 +140,7 @@ public class fragment_account extends Fragment {
                 GET_FOLLOWING_NUM(hasIntentId); // 팔로잉 수 가져오기
                 GET_SNS_POST_NUM(hasIntentId); // SNS 게시물 수 가져오기
                 CHECK_SUBSCRIBE(hasIntentId, id); // 해당 계정을 체크해야함.
+                GET_FOLLOW_NUM(id, hasIntentId); // 팔로워 리스트 가져옴
 
                 // VOD 수 가져오기
                 // 팔로워 수 가져오기
@@ -168,6 +170,9 @@ public class fragment_account extends Fragment {
             GET_USER_INFO(id); // 사용자 정보 가져오기
             GET_FOLLOWING_NUM(id); // 팔로잉 수 가져오기
             GET_SNS_POST_NUM(id); // SNS 게시물 수 가져오기
+            GET_FOLLOW_NUM(id, id); // 팔로워 리스트 가져오기
+
+
             // VOD 수 가져오기
             // 팔로워 수 가져오기
         }
@@ -278,10 +283,10 @@ public class fragment_account extends Fragment {
                 if(hasIntentId != null){ // 홈 게시글에서 sns 계정 클릭해서 들어왔을 경우 통신
 
 
-                        Intent intent = new Intent(getActivity(), SNSFollowListActivity.class);
-                        intent.putExtra("tag", "following");
-                        intent.putExtra("user_id", hasIntentId); // 해당 계정의 유닉 아이디를 넘긴다.
-                        startActivity(intent);
+                    Intent intent = new Intent(getActivity(), SNSFollowListActivity.class);
+                    intent.putExtra("tag", "following");
+                    intent.putExtra("user_id", hasIntentId); // 해당 계정의 유닉 아이디를 넘긴다.
+                    startActivity(intent);
 
 
                 }else{ // 홈 게시글이 아닌 바로 나의 계정 sns에서 들어갔을 경우
@@ -330,36 +335,36 @@ public class fragment_account extends Fragment {
     //--------------------------------------------------------------------------------------------------------------------------------------------------
 
     public void GET_USER_INFO(String id){
-            Log.i(TAG, "GET_USER_INFO ");
-            // 닉네임 가져오기
+        Log.i(TAG, "GET_USER_INFO ");
+        // 닉네임 가져오기
 
-            Call<USERINFO> GET_USER_INFO_CALL = requestApi.GET_USER_INFO(id);
+        Call<USERINFO> GET_USER_INFO_CALL = requestApi.GET_USER_INFO(id);
 
-            GET_USER_INFO_CALL.enqueue(new Callback<USERINFO>() {
-                @Override
-                public void onResponse(Call<USERINFO> call, Response<USERINFO> response) {
-                    if(!response.isSuccessful()){
-                        Log.i(TAG, "onRes" +
-                                "ponse " + response.message());
-                        Log.i(TAG, "onResponse / code ; " + response.code());
-                        return;
-                    }
-                    USERINFO userinfo = response.body();
-
-
-                    System.out.println("userinfo.getNick_name(); : " + userinfo.getNick_name());
-                    account_toolbar_layout_title.setText(userinfo.getNick_name()); // 닉네임을 설정
-                    user_nick.setText(userinfo.getNick_name()); // 닉네임
-                    Glide.with(getActivity()).load(userinfo.getProfile_img()).into(user_profile); // 프로필 이미지
-
-
+        GET_USER_INFO_CALL.enqueue(new Callback<USERINFO>() {
+            @Override
+            public void onResponse(Call<USERINFO> call, Response<USERINFO> response) {
+                if(!response.isSuccessful()){
+                    Log.i(TAG, "onRes" +
+                            "ponse " + response.message());
+                    Log.i(TAG, "onResponse / code ; " + response.code());
+                    return;
                 }
+                USERINFO userinfo = response.body();
 
-                @Override
-                public void onFailure(Call<USERINFO> call, Throwable t) {
-                    Log.e(TAG, "onFailure: " + t.getMessage());
-                }
-            });
+
+                System.out.println("userinfo.getNick_name(); : " + userinfo.getNick_name());
+                account_toolbar_layout_title.setText(userinfo.getNick_name()); // 닉네임을 설정
+                user_nick.setText(userinfo.getNick_name()); // 닉네임
+                Glide.with(getActivity()).load(userinfo.getProfile_img()).into(user_profile); // 프로필 이미지
+
+
+            }
+
+            @Override
+            public void onFailure(Call<USERINFO> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
+            }
+        });
     }
 
     public void GET_VOD_NUM(String id){
@@ -367,7 +372,11 @@ public class fragment_account extends Fragment {
     }
 
     public void GET_SNS_POST_NUM(String id){
-        Call<PostResult> postResultCall = requestApi.GET_NUM("acpostnum.php", id);
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("user_id", id);
+
+
+        Call<PostResult> postResultCall = requestApi.GET_NUM("acpostnum.php", parameters);
         postResultCall.enqueue(new Callback<PostResult>() {
             @Override
             public void onResponse(Call<PostResult> call, Response<PostResult> response) {
@@ -393,12 +402,51 @@ public class fragment_account extends Fragment {
     }
 
 
-    public void GET_FOLLOW_NUM(String id){
+    public void GET_FOLLOW_NUM(String id, String user_id){ // 해당 계정의 아이디, 클릭 아이디
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("id", id);
+        parameters.put("user_id", user_id);
+        Log.d(TAG, "GET_FOLLOW_NUM: id" + id);
+        Log.d(TAG, "GET_FOLLOW_NUM: user_id" + user_id);
+
+
+        Call<PostResult> postResultCall = requestApi.GET_NUM("acfollowernum.php", parameters);
+
+        postResultCall.enqueue(new Callback<PostResult>() {
+            @Override
+            public void onResponse(Call<PostResult> call, Response<PostResult> response) {
+                if(!response.isSuccessful()){
+                    Log.d(TAG, "onResponse: " + response.message());
+                    Log.d(TAG, "onResponse: GET_FOLLOW_NUM " + response.message());
+                    Log.d(TAG, "onResponse: GET_FOLLOW_NUM " + response.raw() );
+                    return;
+                }
+
+                PostResult postResult = response.body();
+
+                if(!postResult.equals(null)){
+                    follower_num.setText(postResult.getResult());
+                }
+
+
+
+
+
+            }
+
+            @Override
+            public void onFailure(Call<PostResult> call, Throwable t) {
+                Log.d(TAG, "onFailure: GET_FOLLOW_NUM" + t.getMessage());
+            }
+        });
 
     }
 
     public void GET_FOLLOWING_NUM(String id){
-        Call<PostResult> postResultCall = requestApi.GET_NUM("acscribenum.php", id);
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("user_id", id);
+
+        Call<PostResult> postResultCall = requestApi.GET_NUM("acscribenum.php", parameters);
         postResultCall.enqueue(new Callback<PostResult>() {
             @Override
             public void onResponse(Call<PostResult> call, Response<PostResult> response) {

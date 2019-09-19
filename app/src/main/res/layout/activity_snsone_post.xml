@@ -25,6 +25,14 @@
     </androidx.appcompat.widget.Toolbar>
 
 
-    <include layout="@layout/sns_post_item"/>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/sns_post_item"/>
+
+    </androidx.core.widget.NestedScrollView>
+
+
 
 </LinearLayout>

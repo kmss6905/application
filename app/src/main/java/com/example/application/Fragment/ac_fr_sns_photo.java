@@ -26,6 +26,7 @@ import com.example.application.SNS.Class.ac_photo_item;
 import com.example.application.SNS.SNSOnePostActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -57,6 +58,7 @@ public class ac_fr_sns_photo extends Fragment implements SwipeRefreshLayout.OnRe
     RecyclerView photoListRecyclerview; // 리사이클러뷰
     AcPhotosAdapter acPhotosAdapter; // 어댑터
     public ArrayList<ac_photo_item> ac_photo_itemArrayList; // 데이터 리스트
+
 
 
 
@@ -221,25 +223,23 @@ public class ac_fr_sns_photo extends Fragment implements SwipeRefreshLayout.OnRe
 
     }
 
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //                                                                                       새로고침
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
     @Override
     public void onRefresh() {
 
         ac_photo_itemArrayList.clear(); // 모든데이터를 지운다
         acPhotosAdapter.notifyDataSetChanged(); // 갱신한다.
-
-//        pageNum = 1; // 다시 리셋
-//
-//        CALL_LIKE_LIST(postNum, 1, id);
-
-
-        pageNum = 1;
-
-        if(hasIntentId != null){  // 남의 계정
+        pageNum = 1; // 다시 1부터 10개까지 가져옵니다.
+        if(hasIntentId != null){  // 남의 계정일 경우
             GET_PHOTO(hasIntentId, pageNum);
-        }else{ //나의 계정
+        }else{ //나의 계정일 경우
             GET_PHOTO(id, pageNum);
         }
         swipeRefreshLayout.setRefreshing(false);
 
     }
+
 }
