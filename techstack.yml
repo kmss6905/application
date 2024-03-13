@@ -1,0 +1,163 @@
+repo_name: kmss6905/application
+report_id: a1a67a86ee9866ca4d83f15466a306fe
+version: 0.1
+repo_type: Public
+timestamp: '2024-03-13T07:17:42+00:00'
+requested_by: kmss6905
+provider: github
+branch: master
+detected_tools_count: 12
+tools:
+- name: Java
+  description: A concurrent, class-based, object-oriented, language specifically designed
+    to have as few implementation dependencies as possible
+  website_url: https://www.java.com
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/995/K85ZWV2F.png
+  detection_source_url: https://github.com/kmss6905/application
+  detection_source: Repo Metadata
+- name: Android SDK
+  description: An SDK that provides you the API libraries and developer tools necessary
+    to build, test, and debug apps for Android.
+  website_url: http://developer.android.com
+  version: '29.0'
+  open_source: false
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Frameworks (Full Stack)
+  image_url: https://img.stackshare.io/service/1010/m8jf0po4imu8t5eemjdd.png
+  detection_source_url: https://github.com/kmss6905/application/blob/master/hen/app/build.gradle
+  detection_source: hen/app/build.gradle
+  last_updated_by: kmss6905
+  last_updated_on: 2019-09-17 15:45:29.000000000 Z
+- name: Firebase
+  description: The Realtime App Platform
+  website_url: https://firebase.google.com/
+  open_source: false
+  hosted_saas: true
+  category: Application Hosting
+  sub_category: Realtime Backend / API
+  image_url: https://img.stackshare.io/service/116/cZLxNFZS.jpg
+  detection_source_url: https://github.com/kmss6905/application/blob/master/app/build.gradle
+  detection_source: app/build.gradle
+  last_updated_by: kmss6905
+  last_updated_on: 2019-07-30 02:51:54.000000000 Z
+- name: Git
+  description: Fast, scalable, distributed revision control system
+  website_url: http://git-scm.com/
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Version Control System
+  image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source_url: https://github.com/kmss6905/application
+  detection_source: Repo Metadata
+- name: Gradle
+  description: A powerful build system for the JVM
+  website_url: https://www.gradle.org/
+  license: Apache-2.0
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Java Build Tools
+  image_url: https://img.stackshare.io/service/975/gradlephant-social-black-bg.png
+  detection_source_url: https://github.com/kmss6905/application/blob/master/app/build.gradle
+  detection_source: app/build.gradle
+  last_updated_by: kmss6905
+  last_updated_on: 2019-07-30 02:51:54.000000000 Z
+- name: Android OS
+  description: An open source mobile operating system by Google
+  website_url: https://www.android.com
+  version: '10.0'
+  open_source: false
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Operating Systems
+  image_url: https://img.stackshare.io/service/9586/ZvmtaSXW_400x400.jpg
+  detection_source_url: https://github.com/kmss6905/application/blob/master/hen/app/build.gradle
+  detection_source: hen/app/build.gradle
+  last_updated_by: kmss6905
+  last_updated_on: 2019-09-17 15:45:29.000000000 Z
+- name: Retrofit
+  description: A type-safe HTTP client for Android and Java
+  website_url: http://square.github.io/retrofit/
+  license: Apache-2.0
+  open_source: true
+  hosted_saas: false
+  category: Application Utilities
+  sub_category: API Tools
+  image_url: https://img.stackshare.io/service/2856/retrofit-logo.png
+  detection_source_url: https://github.com/kmss6905/application/blob/master/app/build.gradle
+  detection_source: app/build.gradle
+  last_updated_by: kmss6905
+  last_updated_on: 2019-07-30 02:51:54.000000000 Z
+- name: com.github.bumptech.glide:glide
+  description: A fast and efficient image loading library for Android focused on smooth
+    scrolling
+  version: 4.9.0
+  license: BSD-2-Clause,Apache-2.0
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: Maven Packages
+  image_url: https://img.stackshare.io/package/maven/image.png
+  detection_source_url: https://github.com/kmss6905/application/blob/master/app/build.gradle
+  detection_source: app/build.gradle
+  last_updated_by: kmss6905
+  last_updated_on: 2019-09-17 15:42:55.000000000 Z
+- name: com.squareup.retrofit2:converter-gson
+  version: 2.6.0
+  open_source: false
+  hosted_saas: false
+  category: Libraries
+  sub_category: Maven Packages
+  image_url: https://img.stackshare.io/package/maven/image.png
+  detection_source_url: https://github.com/kmss6905/application/blob/master/app/build.gradle
+  detection_source: app/build.gradle
+  last_updated_by: kmss6905
+  last_updated_on: 2019-09-17 15:42:55.000000000 Z
+- name: com.squareup.retrofit2:converter-scalars
+  version: 2.4.0
+  open_source: false
+  hosted_saas: false
+  category: Libraries
+  sub_category: Maven Packages
+  image_url: https://img.stackshare.io/package/maven/image.png
+  detection_source_url: https://github.com/kmss6905/application/blob/master/app/build.gradle
+  detection_source: app/build.gradle
+  last_updated_by: kmss6905
+  last_updated_on: 2019-09-17 15:42:55.000000000 Z
+- name: com.squareup.retrofit2:retrofit
+  version: 2.6.0
+  open_source: false
+  hosted_saas: false
+  category: Libraries
+  sub_category: Maven Packages
+  image_url: https://img.stackshare.io/package/maven/image.png
+  detection_source_url: https://github.com/kmss6905/application/blob/master/app/build.gradle
+  detection_source: app/build.gradle
+  last_updated_by: kmss6905
+  last_updated_on: 2019-09-17 15:42:55.000000000 Z
+- name: junit:junit
+  description: JUnit is a unit testing framework for Java
+  version: '4.12'
+  license: EPL-1.0
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: Maven Packages
+  image_url: https://img.stackshare.io/package/maven/image.png
+  detection_source_url: https://github.com/kmss6905/application/blob/master/app/build.gradle
+  detection_source: app/build.gradle
+  last_updated_by: kmss6905
+  last_updated_on: 2019-07-30 02:51:54.000000000 Z
+  vulnerabilities:
+  - name: TemporaryFolder on unix-like systems does not limit access to created files
+    cve_id: CVE-2020-15250
+    cve_url: https://github.com/advisories/GHSA-269g-pwp5-87pp
+    detected_date: Aug 22
+    severity: moderate
+    first_patched: 4.13.1
